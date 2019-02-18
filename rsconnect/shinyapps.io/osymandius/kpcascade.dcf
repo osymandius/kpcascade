@@ -1,0 +1,12 @@
+name: kpcascade
+title: kpcascade
+username:
+account: osymandius
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 718880
+bundleId: 1878203
+url: https://osymandius.shinyapps.io/kpcascade/
+when: 1550241319.85498
+asMultiple: FALSE
+asStatic: FALSE
