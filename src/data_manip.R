@@ -1,14 +1,34 @@
-clean_data <- function(data_input) {
-
-  cleaned_data <- data_input %>%
-    rename("casState" = "Cascade.status", "KP" = "Key.population", "year" = "Year", "city" = "City.Region", "point_90" = "Point.Estimate", "ll_90" = "Lower.Bound", "ul_90" = "Upper.Bound") %>%
+namesToCode <- function(data_input) {
+  data_input %<>%
+    rename("casState" = "Cascade.status", "year" = "Year", "city" = "City.Region") %>%
     mutate(casState = ifelse(casState == "Size Estimate", "sizeEst", 
                              ifelse(casState == "Prevalence", "prev", 
                                     ifelse(casState == "Aware of Status", "aware",
                                            ifelse(casState == "On ART", "onART", "vSupp")))))
   
+  return(data_input)
+  
+}
+
+namesToHuman <- function(data_input) {
+  data_input %<>%
+    rename("Cascade.status" = "casState", "Year" = "year" , "City.Region" = "city") %>%
+    mutate(Cascade.status = ifelse(Cascade.status == "sizeEst", "Size Estimate", 
+                             ifelse(Cascade.status == "prev", "Prevalence", 
+                                    ifelse(Cascade.status == "aware", "Aware of Status",
+                                           ifelse(Cascade.status == "onART", "On ART", "Virally Suppressed")))))
+  
+  return(data_input)
+  
+}
+
+clean_data <- function(data_input) {
+
+  cleaned_data <- namesToCode(data_input) %>%
+    rename("point_90" = "Point.Estimate", "ll_90" = "Lower.Bound", "ul_90" = "Upper.Bound")
+  
   cleaned_data$casState <- factor(cleaned_data$casState, levels=unique(cleaned_data$casState))
-  cleaned_data$year <- as.character(cleaned_data$year)
+  cleaned_data$year = as.character(cleaned_data$year)
   
   return(cleaned_data)
   

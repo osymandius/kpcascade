@@ -15,7 +15,14 @@ plots <- function() {
                plotOutput("cascade_count")
       ),
       tabPanel(title = "Data",
-               column(8, dataTableOutput("cascade_table"))
+        tabsetPanel(
+          tabPanel(title="Proportions",
+              column(8, DTOutput("cascade_table_proportion"))
+          ),
+          tabPanel(title="Counts",
+              column(8, DTOutput("cascade_table_count"))
+          )
+        )
       )
     )
   )

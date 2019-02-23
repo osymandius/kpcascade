@@ -1,5 +1,6 @@
 plots_server <- function(input, output) {
-    output$cascade_percent <- renderPlot({
+  
+  output$cascade_percent <- renderPlot({
       cascade_percent <- switch(input$cascade,
                                 "90-90-90" = proportion_data %>%
                                   filter(casState != "sizeEst" & casState!= "prev") %>%
@@ -67,5 +68,17 @@ plots_server <- function(input, output) {
            )
   })
   
-  # output$cascade_table <- renderDataTable(data)
+  output$cascade_table_proportion <- renderDT(
+    
+    datatable(proportion_data %<>%
+      namesToHuman() %>%
+      rename("Point Estimate" = "point_90", "Lower 95% Bound" = "ll_90", "Upper 95% Bound" = "ul_90", "Point Estimate" = "point_72", "Lower 95% Bound" = "ll_72", "Upper 95% Bound" = "ul_72")), 
+    container = defaultDataTableOptions())
+  
+  output$cascade_table_count <- renderDT(
+    count_data %<>%
+      select(-c(count_target, x, xend)) %>%
+      namesToHuman() %>%
+      rename("Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72")
+    )
 }

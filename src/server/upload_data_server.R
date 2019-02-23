@@ -1,4 +1,7 @@
 upload_data_server <- function(input, output) {
+  
+    example_data <- read.csv("example_data.csv")
+  
     output$template_download <- downloadHandler(
     filename = function() {
       paste("KP_cascade_template.csv", sep='')
@@ -7,11 +10,12 @@ upload_data_server <- function(input, output) {
       write.csv(example_data, con, na="")
     }
   )
-    example_data <- read.csv("example_data.csv")
+    
+    # example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data.csv")
     
     output$data_upload <- renderDataTable({
       example_data
-    })
+    }, options=defaultDataTableOptions())
     
     data_clean <- clean_data(example_data)
     proportion_data <<- proportion_manip(data_clean)
