@@ -8,9 +8,10 @@ plots <- function() {
     ),
     tabsetPanel(              
       tabPanel(title = "Plots",
-               "Cascade by percentage",
+               h3("Cascade by percentage"),
                plotOutput("cascade_percent"),
-               "Cascade by size estimate",
+               h3("Cascade by size estimate"),
+               h4(textOutput("cascade_count_warning")),
                plotOutput("cascade_count")
       ),
       tabPanel(title = "Data",

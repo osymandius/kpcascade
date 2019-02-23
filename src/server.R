@@ -1,3 +1,4 @@
+source("data_manip.R")
 source("server/upload_data_server.R")
 source("server/plots_server.R")
 
