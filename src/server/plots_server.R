@@ -72,13 +72,44 @@ plots_server <- function(input, output) {
     
     datatable(proportion_data %<>%
       namesToHuman() %>%
-      rename("Point Estimate" = "point_90", "Lower 95% Bound" = "ll_90", "Upper 95% Bound" = "ul_90", "Point Estimate" = "point_72", "Lower 95% Bound" = "ll_72", "Upper 95% Bound" = "ul_72")), 
-    container = defaultDataTableOptions())
+      rename("Point Estimate" = "point_90", "Lower 95% Bound" = "ll_90", "Upper 95% Bound" = "ul_90", "Point Estimate" = "point_72", "Lower 95% Bound" = "ll_72", "Upper 95% Bound" = "ul_72"),
+      container = htmltools::withTags(table(
+        class = 'display',
+        thead(
+          tr(
+            th(rowspan = 2, 'Cascade State'),
+            th(rowspan = 2, 'KP'),
+            th(rowspan = 2, 'Year'),
+            th(rowspan = 2, 'City/Region'),
+            th(colspan = 3, '90-90-90'),
+            th(colspan = 3, '90-81-72')
+          ),
+          tr(
+            lapply(rep(c('Point Estimate', 'Lower 95% Bound', "Upper 95% Bound"), 2), th)
+          )
+        )
+      )), rownames=FALSE), 
+    )
   
   output$cascade_table_count <- renderDT(
-    count_data %<>%
+    datatable(count_data %<>%
       select(-c(count_target, x, xend)) %>%
       namesToHuman() %>%
-      rename("Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72")
-    )
+      rename("Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72"),
+    container = htmltools::withTags(table(
+      class = 'display',
+      thead(
+        tr(
+          th(rowspan = 2, 'Cascade State'),
+          th(rowspan = 2, 'KP'),
+          th(rowspan = 2, 'Year'),
+          th(rowspan = 2, 'City/Region'),
+          th(colspan = 3, '90-81-72')
+        ),
+        tr(
+          lapply(rep(c('Point Estimate', 'Lower 95% Bound', "Upper 95% Bound"), 1), th)
+        )
+      )
+    )), rownames=FALSE)
+  )
 }

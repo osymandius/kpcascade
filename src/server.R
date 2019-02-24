@@ -1,7 +1,8 @@
-source("data_manip.R")
-source("server/data_tables.R")
-source("server/upload_data_server.R")
-source("server/plots_server.R")
+# source("data_manip.R")
+# source("server/data_tables.R")
+# source("server/upload_data_server.R")
+# source("server/plots_server.R")
+# source("style.css")
 
 server <- function(input, output) {
   
