@@ -1,3 +1,50 @@
 th, tr {
   text-align: center !important;
 }
+
+#resetToExampleData, #template_download, #data_upload_size2 {
+  margin-top: 25px;
+}
+
+#download_proportion_cascade, #download_count_cascade {
+  height: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  color: red;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  vertical-align: middle;
+  padding-top: 10px;
+}
+
+#template_download, #data_input, #resetToExampleData {
+  height:30px;
+  font-size: 14px;
+  font-weight: bold;
+  vertical-align: middle;
+  padding-bottom: 10px;
+}
+
+.title {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title h1 {
+  font-size:45px;
+}
+
+.sanac {
+  height: 250px;
+  width: 250px;
+}
+
+.ucsf {
+  width:300px;
+}
+
+.intro_text {
+  margin-top: 100px;
+}

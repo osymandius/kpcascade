@@ -98,8 +98,7 @@ plots_server <- function(input, output) {
   output$cascade_table_proportion <- renderDT(
     datatable(proportion_data %>%
       filter(casState != "sizeEst") %>%
-      namesToHuman() %>%
-      rename("Point Estimate" = "point_90", "Lower 95% Bound" = "ll_90", "Upper 95% Bound" = "ul_90", "Point Estimate" = "point_72", "Lower 95% Bound" = "ll_72", "Upper 95% Bound" = "ul_72"),
+      namesToHuman(),
     container = wide6(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
       formatRound(columns = 5:10, digits=3) 
   )
@@ -107,9 +106,41 @@ plots_server <- function(input, output) {
   output$cascade_table_count <- renderDT(
     datatable(count_data %>%
       select(-c(count_target, x, xend)) %>%
+      filter(casState != "sizeEst") %>%
       namesToHuman() %>%
-      rename("Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72"),
+      mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)),
     container = wide3_72(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
       formatRound(columns=5:7, digits=0)
   )
+  
+  output$download_proportion_cascade <- downloadHandler(
+    filename = function() {
+      paste("KP_proportion_cascade.csv", sep='')
+    },
+    content = function (con) {
+      write.csv(proportion_data %>%
+                  filter(casState != "sizeEst") %>%
+                  namesToHuman() %>%
+                  mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)) %>%
+                  rename("Point 90-90-90" = "point_90", "Lower 90-90-90" = "ll_90", "Upper 90-90-90" = "ul_90", "Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72"), 
+                con, na="")
+    }
+  )
+  
+  output$download_count_cascade <- downloadHandler(
+    filename = function() {
+      paste("KP_count_cascade.csv", sep='')
+    },
+    content = function (con) {
+      write.csv(count_data %>%
+                  select(-c(count_target, x, xend)) %>%
+                  filter(casState != "sizeEst") %>%
+                  namesToHuman() %>%
+                  mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)) %>%
+                  rename("Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72"),
+                con, na="")
+    }
+  )
 }
+
+

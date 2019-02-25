@@ -1,9 +1,10 @@
 navigationPanel <- function() {
-  navlistPanel(
+  navlistPanel(HTML("<b>KPCascade</b>"),
     widths = c(2, 10), well = FALSE,
-    # tabPanel("Introduction", introduction()),
+    tabPanel("Intro", introduction()),
     tabPanel("Upload data", upload_data()),
-    tabPanel("Plots", plots())
+    tabPanel("Visualise data", plots()),
+    tabPanel("About", about())
   )
 }
                                 

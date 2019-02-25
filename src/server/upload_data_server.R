@@ -28,13 +28,13 @@ upload_data_server <- function(input, output) {
     )
     
     output$KP_option <- renderUI({
-      selectInput(inputId = "kp", label="Choose a key population", choices=as.character(unique(example_data$KP)))
+      selectInput(inputId = "kp", label="Choose key population(s)", choices=as.character(unique(example_data$KP)))
     })
     output$year_option <- renderUI({
-      selectInput(inputId = "year", label = "Choose one or more survey years", choices=as.character(unique(example_data$Year)), multiple=TRUE, selected=as.character(max(example_data$Year)))
+      selectInput(inputId = "year", label = "Choose survey year(s)", choices=as.character(unique(example_data$Year)), multiple=TRUE, selected=as.character(max(example_data$Year)))
     })
     output$city_option <- renderUI({
-      selectInput(inputId = "subnat", label = "Choose one or more regions", multiple=TRUE, choices=as.character(unique(example_data$City.Region)), selected=as.character(unique(example_data$City.Region)[1:3]))
+      selectInput(inputId = "subnat", label = "Choose region(s)", multiple=TRUE, choices=as.character(unique(example_data$City.Region)), selected=as.character(unique(example_data$City.Region)[1:3]))
     })
     
     data_clean <- clean_data(example_data)
@@ -58,6 +58,16 @@ upload_data_server <- function(input, output) {
         filter(Cascade.status != "Size Estimate"), 
         container = wide3_90(), rownames=FALSE, options = list(pageLength=999, dom='t'))
     )
+    
+    output$KP_option <- renderUI({
+      selectInput(inputId = "kp", label="Choose key population(s)", choices=as.character(unique(new_data$KP)))
+    })
+    output$year_option <- renderUI({
+      selectInput(inputId = "year", label = "Choose survey year(s)", choices=as.character(unique(new_data$Year)), multiple=TRUE, selected=as.character(max(new_data$Year)))
+    })
+    output$city_option <- renderUI({
+      selectInput(inputId = "subnat", label = "Choose region(s)", multiple=TRUE, choices=as.character(unique(new_data$City.Region)), selected=as.character(unique(new_data$City.Region)[1:3]))
+    })
     
     data_clean <- clean_data(new_data)
     proportion_data <<- proportion_manip(data_clean)
