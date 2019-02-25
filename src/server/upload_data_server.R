@@ -13,9 +13,29 @@ upload_data_server <- function(input, output) {
     
     # example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data.csv")
     
-    output$data_upload <- renderDataTable({
-      example_data
-    }, options=defaultDataTableOptions())
+    output$data_upload_size2 <- output$data_upload_size <- renderDT(
+      datatable(example_data %>%
+        filter(Cascade.status == "Size Estimate"), 
+        container = wide3_nohead(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
+        formatRound(columns=5:7, digits=0)
+    )
+    
+    output$data_upload_prop <- renderDT(
+      datatable(example_data %>%
+        filter(Cascade.status != "Size Estimate"), 
+      container = wide3_90(), rownames=FALSE, options = list(pageLength=999, dom='t'))  %>%
+        formatRound(columns=5:7, digits=3)
+    )
+    
+    output$KP_option <- renderUI({
+      selectInput(inputId = "kp", label="Choose a key population", choices=as.character(unique(example_data$KP)))
+    })
+    output$year_option <- renderUI({
+      selectInput(inputId = "year", label = "Choose one or more survey years", choices=as.character(unique(example_data$Year)), multiple=TRUE, selected=as.character(max(example_data$Year)))
+    })
+    output$city_option <- renderUI({
+      selectInput(inputId = "subnat", label = "Choose one or more regions", multiple=TRUE, choices=as.character(unique(example_data$City.Region)), selected=as.character(unique(example_data$City.Region)[1:3]))
+    })
     
     data_clean <- clean_data(example_data)
     proportion_data <<- proportion_manip(data_clean)
@@ -27,9 +47,17 @@ upload_data_server <- function(input, output) {
     
     req(inFile) 
     new_data <<- read.csv(inFile$datapath, header = TRUE, sep = ",")
-    output$data_upload <- renderDataTable({
-      new_data
-    })
+    output$data_upload_size <- renderDT(
+      datatable(new_data %>%
+        filter(Cascade.status == "Size Estimate"), 
+        container = wide3_nohead(), rownames=FALSE, options = list(pageLength=999, dom='t'))
+    )
+      
+    output$data_upload_prop <- renderDT(
+      datatable(new_data %>%
+        filter(Cascade.status != "Size Estimate"), 
+        container = wide3_90(), rownames=FALSE, options = list(pageLength=999, dom='t'))
+    )
     
     data_clean <- clean_data(new_data)
     proportion_data <<- proportion_manip(data_clean)
@@ -38,9 +66,19 @@ upload_data_server <- function(input, output) {
   
   observeEvent(input$resetToExampleData, {
     
-    output$data_upload <- renderDataTable({
-      example_data
-    })
+    output$data_upload_size <- renderDT(
+      datatable(example_data %>%
+                  filter(Cascade.status == "Size Estimate"), 
+                container = wide3_nohead(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
+        formatRound(columns=5:7, digits=0)
+    )
+    
+    output$data_upload_prop <- renderDT(
+      datatable(example_data %>%
+                  filter(Cascade.status != "Size Estimate"), 
+                container = wide3_90(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
+      formatRound(columns = 5:7, digits=3)
+    )
     
     data_clean <- clean_data(example_data)
     proportion_data <<- proportion_manip(data_clean)

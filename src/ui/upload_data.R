@@ -5,7 +5,8 @@ upload_data <- function() {
       column(3, fileInput('data_input', 'Choose file to upload', accept = '.csv')),
       column(3, actionButton("resetToExampleData", label = "Reset to default data"))
     ),
-    textOutput("test"),
-    dataTableOutput(outputId = "data_upload")
+    column(8, DTOutput(outputId = "data_upload_size")),
+    br(),
+    column(8, DTOutput(outputId = "data_upload_prop"))
   )
 }
