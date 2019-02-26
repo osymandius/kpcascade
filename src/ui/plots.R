@@ -1,13 +1,27 @@
 plots <- function() {
-  div(style="margin-left:10%; margin-right: 10%",
+  div(style="margin-left:5%; margin-right: 5%",
     h2("Visualise data"),
     br(),
-    fluidRow(
-      column(3, uiOutput("KP_option")),
-      column(3, uiOutput("year_option")),
-      column(3, uiOutput("city_option")),
-      column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-72")))
-    ),
+    # fluidRow(
+      fluidRow(
+        column(3, uiOutput("KP_option")),
+        column(3, uiOutput("year_option")),
+        column(3, uiOutput("city_option")),
+        column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-72")))
+      ),
+      # fluidRow(
+      # column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-72", "Custom"))),
+      # column(6,
+      #   fluidRow(
+      #     div(class="custom_cas",
+      #       column(2, numericInput(inputId = "custom_cas_1", min=0, max=100, step=1, value=90, label=NULL, width="75px")),
+      #       column(2, numericInput(inputId = "custom_cas_2", min=0, max=100, step=1, value=90, label=NULL, width="75px")), 
+      #       column(2, numericInput(inputId = "custom_cas_3", min=0, max=100, step=1, value=90, label=NULL, width="75px"))
+      #     ) %>% shinyjs::hidden()
+      #   )
+      #   )
+      # )
+    # ),
     tabsetPanel(              
       tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
                h3("Cascade by percentage"),

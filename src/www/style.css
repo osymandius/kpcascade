@@ -6,6 +6,10 @@ th, tr {
   margin-top: 25px;
 }
 
+#custom_cas_1, #custom_cas_2, #custom_cas_3 {
+  margin-top: 25px;
+}
+
 #download_proportion_cascade, #download_count_cascade {
   height: 50px;
   font-size: 16px;

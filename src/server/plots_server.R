@@ -1,5 +1,7 @@
 plots_server <- function(input, output) {
   
+  
+  
   output$cascade_percent <- renderPlot({
       switch(input$cascade,
              "90-90-90" = proportion_data %>%
@@ -51,9 +53,9 @@ plots_server <- function(input, output) {
                                  ggplot(aes(x=casState, group=year)) +
                                    geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
                                    geom_errorbar(aes(ymin=ll_72, ymax=ul_72), width=0.2, position=position_dodge(1))+
-                                   geom_segment(data=count_data %>% filter(!is.na(count_target) & year %in% input$year), aes(x=x, xend=xend, y=count_target, yend=count_target, color="red"))+
+                                   geom_segment(data=count_data %>% filter(!is.na(count_target) & year %in% input$year & city %in% input$subnat), aes(x=x, xend=xend, y=count_target, yend=count_target, color="red"))+
                                    scale_x_discrete(labels=c("Size\nEstimate", "KPLHIV", "Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-                                   theme(axis.text = element_text(size=rel(1.2)),
+                                   theme(axis.text = element_text(size=rel(1.15)),
                                          strip.text = element_text(size=rel(1.3)))+
                                    xlab("")+
                                    guides(color=FALSE)+
@@ -66,7 +68,7 @@ plots_server <- function(input, output) {
                                    geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
                                    geom_errorbar(aes(ymin=ll_72, ymax=ul_72), width=0.2, position=position_dodge(1))+
                                    scale_x_discrete(labels=c("Size\nEstimate", "KPLHIV", "Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-                                   theme(axis.text = element_text(size=rel(1.2)),
+                                   theme(axis.text = element_text(size=rel(1.15)),
                                          strip.text = element_text(size=rel(1.3)))+
                                    xlab("")+
                                    ylab("Number of people")+
@@ -78,7 +80,7 @@ plots_server <- function(input, output) {
                                    geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
                                    geom_errorbar(aes(ymin=ll_72, ymax=ul_72), width=0.2, position=position_dodge(1))+
                                    scale_x_discrete(labels=c("Size\nEstimate", "KPLHIV", "Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-                                   theme(axis.text = element_text(size=rel(1.2)),
+                                   theme(axis.text = element_text(size=rel(1.15)),
                                          strip.text = element_text(size=rel(1.3)))+
                                    xlab("")+
                                    ylab("Number of people")+

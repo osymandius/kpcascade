@@ -3,6 +3,7 @@ library(tidyverse)
 library(DT)
 library(reshape2)
 library(scales)
+# library(shinyjs)
 
 source("src/data_manip.R")
 
