@@ -7,7 +7,7 @@ upload_data_server <- function(input, output) {
       paste("KP_cascade_template.csv", sep='')
     },
     content = function (con) {
-      write.csv(example_data, con, na="")
+      write.csv(example_data, con, na="", row.names = FALSE)
     }
   )
   
