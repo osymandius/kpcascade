@@ -1,19 +1,19 @@
 plots_server <- function(input, output) {
-  
-  
-  
+
   output$cascade_percent <- renderPlot({
       switch(input$cascade,
              "90-90-90" = proportion_data %>%
                filter(casState != "sizeEst" & casState!= "prev") %>%
                filter(year %in% input$year) %>%
                filter(city %in% input$subnat) %>%
+               arrange(year) %>%
                ggplot(aes(x=casState, group=year)) +
                  geom_col(aes(y=point_90, fill=year), position="dodge", stat="identity") +
                  geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
-                 geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9, color="red"))+
-                 geom_segment(aes(x=1.6, xend=2.4, y=0.9, yend=0.9, color="red"))+
-                 geom_segment(aes(x=2.6, xend=3.5, y=0.9, yend=0.9, color="red"))+
+                 geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+                 geom_segment(aes(x=1.6, xend=2.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+                 geom_segment(aes(x=2.6, xend=3.5, y=0.9, yend=0.9), color="navy", linetype=5)+
+                 geom_text(aes(y=0.95, label="90%"), color="navy", linetype=5)+
                  scale_y_continuous(limits=c(0,1), labels=percent)+
                  scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
                  theme(axis.text = element_text(size=rel(1.2)),
@@ -26,12 +26,16 @@ plots_server <- function(input, output) {
                filter(casState != "sizeEst" & casState!= "prev") %>%
                filter(year %in% input$year) %>%
                filter(city %in% input$subnat) %>%
+               arrange(year) %>%
                ggplot(aes(x=casState, group=year)) +
                  geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
                  geom_errorbar(aes(ymin=ll_72, ymax=ul_72), width=0.2, position=position_dodge(1))+
-                 geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9, color="red"))+
-                 geom_segment(aes(x=1.6, xend=2.4, y=0.81, yend=0.81, color="red"))+
-                 geom_segment(aes(x=2.6, xend=3.5, y=0.72, yend=0.72, color="red"))+
+                 geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+                 geom_segment(aes(x=1.6, xend=2.4, y=0.81, yend=0.81), color="navy", linetype=5)+
+                 geom_segment(aes(x=2.6, xend=3.5, y=0.72, yend=0.72), color="navy", linetype=5)+
+                 geom_text(aes(x=1, y=0.95, label="90%"), color="navy", linetype=5)+
+                 geom_text(aes(x=2, y=0.86, label="81%"), color="navy", linetype=5)+
+                 geom_text(aes(x=3, y=0.77, label="72%"), color="navy", linetype=5)+
                  scale_y_continuous(limits=c(0,1), labels=percent)+
                  scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
                  theme(axis.text = element_text(size=rel(1.2)),
@@ -53,7 +57,7 @@ plots_server <- function(input, output) {
                                  ggplot(aes(x=casState, group=year)) +
                                    geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
                                    geom_errorbar(aes(ymin=ll_72, ymax=ul_72), width=0.2, position=position_dodge(1))+
-                                   geom_segment(data=count_data %>% filter(!is.na(count_target) & year %in% input$year & city %in% input$subnat), aes(x=x, xend=xend, y=count_target, yend=count_target, color="red"))+
+                                   geom_segment(data=count_data %>% filter(!is.na(count_target) & year %in% input$year & city %in% input$subnat), aes(x=x, xend=xend, y=count_target, yend=count_target), color="navy", linetype=5)+
                                    scale_x_discrete(labels=c("Size\nEstimate", "KPLHIV", "Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
                                    theme(axis.text = element_text(size=rel(1.15)),
                                          strip.text = element_text(size=rel(1.3)))+

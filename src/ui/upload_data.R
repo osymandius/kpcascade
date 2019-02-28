@@ -6,7 +6,7 @@ upload_data <- function() {
         <h2 style='margin-left:10%'>Upload data</h3>
         <br>
         <div style='font-size:16px; margin-left: 10%; margin-right:10%'>
-          <p><b>KPCascade</b> has data preloaded from Johannesburg, Durban, and Cape Town for female sex workers from 2013 and 2018 - displayed below. For more information on these data, please email Ali Mirzazadeh (Ali.Mirzazadeh@ucsf.edu). If you would like to upload additional data, please download the template below and then upload the amended file.<p>
+          <p><b>KPCascade</b> has data preloaded from Johannesburg, Durban, and Cape Town for female sex workers from 2013 and 2018 - displayed below. For more information on the preloaded data, including sampling methods & definition of sex work, please email Ali Mirzazadeh (Ali.Mirzazadeh@ucsf.edu). If you would like to upload additional data, please download the template below and then upload the amended file.<p>
           <p>Please ensure that:</p>
             <ul>
               <li>Prevalence and treatment cascade data are entered as <b>decimals</b>, not percentages</li>

@@ -31,7 +31,7 @@ upload_data_server <- function(input, output) {
       selectInput(inputId = "kp", label="Choose key population(s)", choices=as.character(unique(example_data$KP)))
     })
     output$year_option <- renderUI({
-      selectInput(inputId = "year", label = "Choose survey year(s)", choices=as.character(unique(example_data$Year)), multiple=TRUE, selected=as.character(max(example_data$Year)))
+      selectInput(inputId = "year", label = "Choose survey year(s)", choices=unique(example_data$Year), multiple=TRUE, selected=max(example_data$Year))
     })
     output$city_option <- renderUI({
       selectInput(inputId = "subnat", label = "Choose region(s)", multiple=TRUE, choices=as.character(unique(example_data$City.Region)), selected=as.character(unique(example_data$City.Region)[1:3]))
