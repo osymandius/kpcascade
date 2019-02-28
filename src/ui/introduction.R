@@ -8,7 +8,7 @@ introduction <- function() {
   fluidRow(
     div(class="intro_text",
       column(8, offset=2, HTML("
-                        <p style='text-align:center; font-size: 20px'>KPCascade assists with the visualisation of HIV treatment cascades in key populations. [SOME OTHER INFORMATION HERE]</p>
+                        <p style='text-align:center; font-size: 20px'>KPCascade assists with the visualisation of HIV treatment cascades in key populations.</p>
                       ")
       )
     )
