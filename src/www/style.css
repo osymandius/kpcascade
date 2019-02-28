@@ -29,6 +29,14 @@ th, tr {
   padding-bottom: 10px;
 }
 
+.plot_height {
+  height: 800px;
+}
+
+#cascade_percent {
+  height: auto !important;
+}
+
 .title {
   width: 80%;
   display: flex;

@@ -3,6 +3,8 @@ library(tidyverse)
 library(DT)
 library(reshape2)
 library(scales)
+library(shinyjs)
+library(lemon)
 
 source("src/data_manip.R")
 
