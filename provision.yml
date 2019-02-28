@@ -1,7 +1,7 @@
 packages:
-	- shiny
-	- tidyverse
-	- DT
-	- reshape2
-	- scales
-	- lemon
+ - shiny
+ - tidyverse
+ - DT
+ - reshape2
+ - scales
+ - lemon
