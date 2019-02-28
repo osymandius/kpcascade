@@ -4,4 +4,4 @@ packages:
 	- DT
 	- reshape2
 	- scales
-  - lemon
+	- lemon
