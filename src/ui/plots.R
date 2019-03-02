@@ -47,6 +47,7 @@ plots <- function() {
             tabsetPanel(
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
                 conditionalPanel("output.viz_option == 'single'",
+                  textOutput("test"),
                   h3("Cascade by percentage SINGLE"),
                   plotOutput("viz1_cascade_percent"),
                   h3("Cascade by size estimate"),
