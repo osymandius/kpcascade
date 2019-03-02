@@ -24,6 +24,17 @@ plots_server <- function(input, output) {
     toggle("viz_examples")
   })
   
+  #Work out how many plots are going to be generated
+  observeEvent(input$subnat, {
+    num_plots <- nrow(proportion_data %>%
+                        filter(KP == testKP) %>%
+                        filter(year %in% testyear) %>%
+                        filter(city %in% testcity) %>%
+                        group_by(city) %>%
+                        summarise()
+    )
+  })
+  
   #### Option 1
   
   #Percent
