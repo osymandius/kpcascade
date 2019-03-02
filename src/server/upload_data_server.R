@@ -1,6 +1,6 @@
 upload_data_server <- function(input, output) {
   
-  example_data <- read.csv("example_data.csv")
+  # example_data <- read.csv("example_data.csv")
   
   output$template_download <- downloadHandler(
     filename = function() {
@@ -11,7 +11,7 @@ upload_data_server <- function(input, output) {
     }
   )
   
-  # example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data.csv")
+  example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data_dev.csv")
   
   output$data_upload_size2 <- output$data_upload_size <- renderDT(
     datatable(example_data %>%
@@ -28,13 +28,13 @@ upload_data_server <- function(input, output) {
   )
   
   output$single_KP_option <- renderUI({
-    selectInput(inputId = "single_kp", label="Choose key population", choices=as.character(unique(example_data$KP)))
+    selectInput(inputId = "single_kp", label="Choose key population", choices=as.character(unique(example_data$KP)), selected=unique(example_data$KP)[1])
   })
   output$multiple_year_option <- renderUI({
     selectInput(inputId = "multiple_year", label = "Choose survey year(s)", choices=unique(example_data$Year), multiple=TRUE, selected=max(example_data$Year))
   })
   output$multiple_KP_option <- renderUI({
-    selectInput(inputId = "multiple_kp", label="Choose key population(s)", multiple=TRUE, choices=as.character(unique(example_data$KP)))
+    selectInput(inputId = "multiple_kp", label="Choose key population(s)", multiple=TRUE, choices=as.character(unique(example_data$KP)), selected=unique(example_data$KP)[1])
   })
   output$single_year_option <- renderUI({
     selectInput(inputId = "single_year", label = "Choose survey year", choices=unique(example_data$Year), selected=max(example_data$Year))

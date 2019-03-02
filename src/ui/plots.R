@@ -10,6 +10,7 @@ plots <- function() {
           # Option 2. Single year, Multiple pops, multiple location.
           column(3, offset=3, actionButton(inputId = "multiple_pop", label="Multiple populations")) #Find multi person icon & add selection fill css/shinyjs
         ),
+        actionButton(inputId = "toggle_viz_examples", label="Toggle example viz"),
         div(id="viz_examples", style="align-items: center", 
             fluidRow(
               column(5, "Choose this to viz 1 pop in mutliple cities over multiple years"),
@@ -19,8 +20,7 @@ plots <- function() {
               column(5, img(style="width:100%", src="placeholder.png")),
               column(5, offset=1, img(style="width:100%", src="placeholder.png"))
             )
-        ),
-        actionButton(inputId = "toggle_viz_examples", label="Toggle example viz")
+        )
       ),
       hr(),
       hidden(

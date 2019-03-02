@@ -1,9 +1,7 @@
 plots_server <- function(input, output) {
   
   ## Option control
-  
-  output$viz_option <- NULL
-  
+
   observeEvent(input$single_pop, {
     hide("viz_examples")
     show("main_plot_body")
@@ -28,13 +26,38 @@ plots_server <- function(input, output) {
   
   #### Option 1
   
+  # output$cascade_percent <- renderPlot({
+  #   proportion_data %>%
+  #     filter(casState != "sizeEst" & casState!= "prev") %>%
+  #     filter(KP == "FSW") %>%
+  #     filter(year %in% c("2018")) %>%
+  #     filter(city %in% c("Cape Town", "Durban", "Johannesburg")) %>%
+  #     arrange(year) %>%
+  #     ggplot(aes(x=casState, group=year)) +
+  #     geom_col(aes(y=point_90, fill=year), position="dodge", stat="identity") +
+  #     geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
+  #     geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #     geom_segment(aes(x=1.6, xend=2.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #     geom_segment(aes(x=2.6, xend=3.5, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #     geom_text(aes(y=0.95, label="90%"), color="navy", linetype=5)+
+  #     scale_y_continuous(limits=c(0,1), labels=percent)+
+  #     scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+  #     theme(axis.text = element_text(size=rel(1.2)),
+  #           strip.text = element_text(size=rel(1.3)))+
+  #     xlab("")+
+  #     ylab("")+
+  #     guides(color=FALSE)+
+  #     facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE)
+  # })
+  
   observeEvent(input$subnat, { 
     if (length(input$subnat)>3) {
-      output$cascade_percent <- renderPlot({
+      output$viz1_cascade_percent <- renderPlot({
         switch(input$cascade,
                "90-90-90" = proportion_data %>%
                  filter(casState != "sizeEst" & casState!= "prev") %>%
-                 filter(year %in% input$year) %>%
+                 filter(KP == input$single_kp) %>%
+                 filter(year %in% input$multiple_year) %>%
                  filter(city %in% input$subnat) %>%
                  arrange(year) %>%
                  ggplot(aes(x=casState, group=year)) +
@@ -54,7 +77,8 @@ plots_server <- function(input, output) {
                  facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE),
                "90-81-72" = proportion_data %>%
                  filter(casState != "sizeEst" & casState!= "prev") %>%
-                 filter(year %in% input$year) %>%
+                 filter(KP == input$single_kp) %>%
+                 filter(year %in% input$multiple_year) %>%
                  filter(city %in% input$subnat) %>%
                  arrange(year) %>%
                  ggplot(aes(x=casState, group=year)) +
@@ -77,11 +101,12 @@ plots_server <- function(input, output) {
         )
       }, height=800)
     } else {
-      output$cascade_percent <- renderPlot({
+      output$viz1_cascade_percent <- renderPlot({
         switch(input$cascade,
                "90-90-90" = proportion_data %>%
                  filter(casState != "sizeEst" & casState!= "prev") %>%
-                 filter(year %in% input$year) %>%
+                 filter(KP == input$single_kp) %>%
+                 filter(year %in% input$multiple_year) %>%
                  filter(city %in% input$subnat) %>%
                  arrange(year) %>%
                  ggplot(aes(x=casState, group=year)) +
@@ -101,7 +126,8 @@ plots_server <- function(input, output) {
                  facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE),
                "90-81-72" = proportion_data %>%
                  filter(casState != "sizeEst" & casState!= "prev") %>%
-                 filter(year %in% input$year) %>%
+                 filter(KP == input$single_kp) %>%
+                 filter(year %in% input$multiple_year) %>%
                  filter(city %in% input$subnat) %>%
                  arrange(year) %>%
                  ggplot(aes(x=casState, group=year)) +
@@ -133,7 +159,8 @@ plots_server <- function(input, output) {
                "90-90-90" = NULL,
                "90-81-72" = switch(length(input$year),
                                    "1" = count_data %>%
-                                     filter(year %in% input$year) %>%
+                                     filter(KP == input$single_kp) %>%
+                                     filter(year %in% input$multiple_year) %>%
                                      filter(city %in% input$subnat) %>%
                                      ggplot(aes(x=casState, group=year)) +
                                      geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
@@ -147,7 +174,8 @@ plots_server <- function(input, output) {
                                      ylab("Number of people")+
                                      facet_wrap(~city, scales="free", ncol=3),
                                    "2" = count_data %>%
-                                     filter(year %in% input$year) %>%
+                                     filter(KP == input$single_kp) %>%
+                                     filter(year %in% input$multiple_year) %>%
                                      filter(city %in% input$subnat) %>%
                                      ggplot(aes(x=casState, group=year)) +
                                      geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
@@ -159,7 +187,8 @@ plots_server <- function(input, output) {
                                      ylab("Number of people")+
                                      facet_wrap(~city, scales="free", ncol=3),
                                    "3" = count_data %>%
-                                     filter(year %in% input$year) %>%
+                                     filter(KP == input$single_kp) %>%
+                                     filter(year %in% input$multiple_year) %>%
                                      filter(city %in% input$subnat) %>%
                                      ggplot(aes(x=casState, group=year)) +
                                      geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
@@ -179,7 +208,8 @@ plots_server <- function(input, output) {
                "90-90-90" = NULL,
                "90-81-72" = switch(length(input$year),
                                    "1" = count_data %>%
-                                     filter(year %in% input$year) %>%
+                                     filter(KP == input$single_kp) %>%
+                                     filter(year %in% input$multiple_year) %>%
                                      filter(city %in% input$subnat) %>%
                                      ggplot(aes(x=casState, group=year)) +
                                      geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
@@ -193,7 +223,8 @@ plots_server <- function(input, output) {
                                      ylab("Number of people")+
                                      facet_wrap(~city, scales="free", ncol=3),
                                    "2" = count_data %>%
-                                     filter(year %in% input$year) %>%
+                                     filter(KP == input$single_kp) %>%
+                                     filter(year %in% input$multiple_year) %>%
                                      filter(city %in% input$subnat) %>%
                                      ggplot(aes(x=casState, group=year)) +
                                      geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
@@ -205,7 +236,8 @@ plots_server <- function(input, output) {
                                      ylab("Number of people")+
                                      facet_wrap(~city, scales="free", ncol=3),
                                    "3" = count_data %>%
-                                     filter(year %in% input$year) %>%
+                                     filter(KP == input$single_kp) %>%
+                                     filter(year %in% input$multiple_year) %>%
                                      filter(city %in% input$subnat) %>%
                                      ggplot(aes(x=casState, group=year)) +
                                      geom_col(aes(y=point_72, fill=year), position="dodge", stat="identity") +
