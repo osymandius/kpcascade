@@ -6,14 +6,16 @@ plots_server <- function(input, output) {
     hide("viz_examples")
     show("main_plot_body")
     show("select_inputs")
-    show("single_pop_inputs")
+    toggle("single_pop_inputs")
+    hide("multiple_pop_inputs")
   })
   
   observeEvent(input$multiple_pop, {
     hide("viz_examples")
     show("main_plot_body")
     show("select_inputs")
-    show("multiple_pop_inputs")
+    toggle("multiple_pop_inputs")
+    hide("single_pop_inputs")
   })
   
   observeEvent(input$toggle_viz_examples, {
