@@ -4,6 +4,7 @@ library(DT)
 library(reshape2)
 library(scales)
 library(lemon)
+library(shinyjs)
 
 source("src/data_manip.R")
 

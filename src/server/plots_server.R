@@ -1,5 +1,22 @@
 plots_server <- function(input, output) {
   
+  ## Option control
+  
+  observeEvent(input$single_pop, {
+    hide("viz_examples")
+    show("main_plot_body")
+  })
+  
+  observeEvent(input$multiple_pop, {
+    hide("viz_examples")
+    show("main_plot_body")
+  })
+  
+  observeEvent(input$toggle_viz_examples, {
+    toggle("viz_examples")
+  })
+  
+  #### Option 1
   
   observeEvent(input$subnat, { 
     if (length(input$subnat)>3) {
@@ -196,36 +213,17 @@ plots_server <- function(input, output) {
   })
   
   
+  ### Option 2
+  
+  
+  
+  #May have to write this to a clone output.
   output$cascade_count_warning <- renderText({
     switch(input$cascade,
            "90-90-90" = "Size estimate visualisation only available with 90-81-72 cascade selection",
            "90-81-72" = NULL
     )
   })
-  
-  # observeEvent(input$subnat, {
-  #   if (length(input$subnat)>3) {
-  #     addClass(id="cascade_plot", class="plot_height")
-  #   } else {
-  #     removeClass(id="cascade_plot", class="plot_height")
-  #   }
-  # })
-  
-  # plot_height <- reactive({
-  #   observeEvent(input$subnat, {
-  #     ifelse(length(input$subnat)>3, 800, 400)
-  #   })
-  # })
-  
-  # observeEvent(input$subnat, {
-  #   output$plot_height <- renderText({
-  #     ifelse(length(input$subnat)>3, "big", "small")
-  #   })
-  # })
-  
-  # observeEvent(input$subnat, {
-  #   output$high_plot <- ifelse(length(input$subnat)>3, TRUE, FALSE)
-  # })
   
   output$cascade_table_proportion <- renderDT(
     datatable(proportion_data %>%
