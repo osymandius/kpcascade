@@ -253,7 +253,7 @@ plots_server <- function(input, output) {
                   namesToHuman() %>%
                   mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)) %>%
                   rename("Point 90-90-90" = "point_90", "Lower 90-90-90" = "ll_90", "Upper 90-90-90" = "ul_90", "Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72"), 
-                con, na="", row.names = FALSE)
+                con, na="")
     }
   )
   
@@ -268,7 +268,7 @@ plots_server <- function(input, output) {
                   namesToHuman() %>%
                   mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)) %>%
                   rename("Point 90-81-72" = "point_72", "Lower 90-81-72" = "ll_72", "Upper 90-81-72" = "ul_72"),
-                con, na="", row.names = FALSE)
+                con, na="")
     }
   )
 }
