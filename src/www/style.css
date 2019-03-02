@@ -33,7 +33,7 @@ th, tr {
   height: 800px;
 }
 
-#cascade_percent {
+#viz1_cascade_percent, #viz2_cascade_percent, #cascade_count {
   height: auto !important;
 }
 
