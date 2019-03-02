@@ -26,10 +26,20 @@ plots <- function() {
       hidden(
         div(id="main_plot_body",
           hidden(
-            div(id="single_pop_inputs",
+            div(id="select_inputs",
               fluidRow(
-                column(3, uiOutput("KP_option")),
-                column(3, uiOutput("year_option")),
+                hidden(
+                  div(id="single_pop_inputs",
+                    column(3, uiOutput("single_KP_option")),
+                    column(3, uiOutput("multi_year_option"))
+                  )
+                ),
+                hidden(
+                  div(id="multiple_pop_inputs",
+                      column(3, uiOutput("multi_KP_option")),
+                      column(3, uiOutput("single_year_option"))
+                  )
+                ),
                 column(3, uiOutput("city_option")),
                 column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-72")))
               )
