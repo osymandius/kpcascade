@@ -43,13 +43,24 @@ plots <- function() {
                 column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-72")))
               )
             ),
-            tabsetPanel(              
+            div(style="font-size:0px", textOutput("viz_option")),
+            tabsetPanel(
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
-                h3("Cascade by percentage"),
-                plotOutput("cascade_percent"),
-                h3("Cascade by size estimate"),
-                h4(textOutput("cascade_count_warning")),
-                plotOutput("cascade_count")
+                conditionalPanel("output.viz_option == 'single'",
+                  h3("Cascade by percentage SINGLE"),
+                  plotOutput("viz1_cascade_percent"),
+                  h3("Cascade by size estimate"),
+                  h4(textOutput("cascade_count_warning")),
+                  plotOutput("cascade_count")
+                ),
+                conditionalPanel("output.viz_option == 'multiple'",
+                  h3("Cascade by percentage MULTIPLE"),
+                  plotOutput("viz2_cascade_percent"),
+                  h3("Cascade by size estimate"),
+                  h4("Size estimates only available with single population visualisation"),
+                  br(),
+                  br()
+                )
               ),
               tabPanel(title = HTML("<b style='font-size:18px'>Data</b>"),
                        br(),

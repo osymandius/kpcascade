@@ -2,20 +2,24 @@ plots_server <- function(input, output) {
   
   ## Option control
   
+  output$viz_option <- NULL
+  
   observeEvent(input$single_pop, {
     hide("viz_examples")
     show("main_plot_body")
     show("select_inputs")
-    toggle("single_pop_inputs")
+    show("single_pop_inputs")
     hide("multiple_pop_inputs")
+    output$viz_option <- renderText("single")
   })
   
   observeEvent(input$multiple_pop, {
     hide("viz_examples")
     show("main_plot_body")
     show("select_inputs")
-    toggle("multiple_pop_inputs")
+    show("multiple_pop_inputs")
     hide("single_pop_inputs")
+    output$viz_option <- renderText("multiple")
   })
   
   observeEvent(input$toggle_viz_examples, {
