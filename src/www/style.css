@@ -29,8 +29,12 @@ th, tr {
   padding-bottom: 10px;
 }
 
-.plot_height {
-  height: 800px;
+.two_row {
+  height:800px;
+}
+
+.three_row {
+  height: 1200px;
 }
 
 #viz1_cascade_percent, #viz2_cascade_percent, #cascade_count {

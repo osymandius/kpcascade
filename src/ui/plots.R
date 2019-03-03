@@ -49,6 +49,7 @@ plots <- function() {
                 conditionalPanel("output.viz_option == 'single'",
                   textOutput("test"),
                   h3("Cascade by percentage SINGLE"),
+                  # uiOutput("plot.ui"),
                   plotOutput("viz1_cascade_percent"),
                   h3("Cascade by size estimate"),
                   h4(textOutput("cascade_count_warning")),
