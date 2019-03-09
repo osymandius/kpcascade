@@ -24,6 +24,14 @@ plots_server <- function(input, output) {
     toggle("viz_examples")
   })
   
+  observeEvent(input$cascade, {
+    if(input$cascade=="Custom") {
+      show("custom_90s")
+    } else {
+      hide("custom_90s")
+    }
+  })
+  
   # Work out how many plots are going to be generated
   num_rows_viz1 <- 1
   num_rows_viz1 <- reactive(

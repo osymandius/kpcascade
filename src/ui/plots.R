@@ -40,7 +40,17 @@ plots <- function() {
                   )
                 ),
                 column(3, uiOutput("city_option")),
-                column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-73")))
+                column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-73", "Custom")),
+                  hidden(
+                    div(id="custom_90s",
+                      splitLayout(
+                        numericInput(inputId = "first90", label = "1st 90", value=90, min=0, max=100, step=1, width="100px"), 
+                        numericInput(inputId = "second90", label = "2nd 90", value=90, min=0, max=100, step=1, width="100px"), 
+                        numericInput(inputId = "third90", label = "3rd 90", value=90, min=0, max=100, step=1, width="100px")
+                      )
+                    )
+                  )
+                )
               )
             ),
             div(style="font-size:0px", textOutput("viz_option")),
