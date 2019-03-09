@@ -8,7 +8,7 @@ wide6 <- function(){
         th(rowspan = 2, 'Year'),
         th(rowspan = 2, 'City/Region'),
         th(colspan = 3, '90-90-90'),
-        th(colspan = 3, '90-81-72')
+        th(colspan = 3, '90-81-73')
       ),
       tr(
         lapply(rep(c('Point Estimate', 'Lower 95% Bound', "Upper 95% Bound"), 2), th)
@@ -52,7 +52,7 @@ wide3_nohead <- function(){
   ))
 }
 
-wide3_72 <- function(){
+wide3_73 <- function(){
   htmltools::withTags(table(
     class = 'display',
     thead(
@@ -61,7 +61,7 @@ wide3_72 <- function(){
         th(rowspan = 2, 'KP'),
         th(rowspan = 2, 'Year'),
         th(rowspan = 2, 'City/Region'),
-        th(colspan = 3, '90-81-72')
+        th(colspan = 3, '90-81-73')
       ),
       tr(
         lapply(rep(c('Point Estimate', 'Lower 95% Bound', "Upper 95% Bound"), 1), th)
