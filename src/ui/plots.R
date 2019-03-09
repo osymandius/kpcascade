@@ -44,15 +44,16 @@ plots <- function() {
                   hidden(
                     div(id="custom_90s",
                       splitLayout(
-                        numericInput(inputId = "first90", label = "1st 90", value=90, min=0, max=100, step=1, width="100px"), 
-                        numericInput(inputId = "second90", label = "2nd 90", value=90, min=0, max=100, step=1, width="100px"), 
-                        numericInput(inputId = "third90", label = "3rd 90", value=90, min=0, max=100, step=1, width="100px")
+                        numericInput(inputId = "first90", label = "1st 90", value=95, min=0, max=100, step=1, width="100px"), 
+                        numericInput(inputId = "second90", label = "2nd 90", value=95, min=0, max=100, step=1, width="100px"), 
+                        numericInput(inputId = "third90", label = "3rd 90", value=95, min=0, max=100, step=1, width="100px")
                       )
                     )
                   )
                 )
               )
             ),
+            textOutput("test2"),
             div(style="font-size:0px", textOutput("viz_option")),
             tabsetPanel(
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
