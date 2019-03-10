@@ -75,45 +75,42 @@ plots_server <- function(input, output) {
   
   ### Number of repeats for target lines
   
-  label_viz1 <- reactive(
-    length(input$single_kp)*length(input$multiple_year)*length(input$subnat)-(sum(is.na(proportion_data %>%
-           filter(casState != "sizeEst" & casState!= "prev") %>%
-           filter(KP == input$single_kp) %>%
-           filter(year %in% input$multiple_year) %>%
-           filter(city %in% input$subnat)
-    ))/6)
+  viz1_prop <- reactive(
+    proportion_data %>%
+      filter(casState != "sizeEst" & casState!= "prev") %>%
+      filter(KP == input$single_kp) %>%
+      filter(year %in% input$multiple_year) %>%
+      filter(city %in% input$subnat)
   )
   
-  label_viz2 <- reactive(
-    sum(is.na(proportion_data %>%
-           filter(casState != "sizeEst" & casState!= "prev") %>%
-           filter(KP %in% input$multiple_kp) %>%
-           filter(year == input$single_year) %>%
-           filter(city %in% input$subnat)
-    ))/6
+  viz2_prop <- reactive(
+    proportion_data %>%
+      filter(casState != "sizeEst" & casState!= "prev") %>%
+      filter(KP %in% input$multiple_kp) %>%
+      filter(year == input$single_year) %>%
+      filter(city %in% input$subnat)
   )
   
-
-
+  viz1_count <- reactive(
+    count_data %>%
+      filter(KP == input$single_kp) %>%
+      filter(year %in% input$multiple_year) %>%
+      filter(city %in% input$subnat)
+  )
+  
   #### Viz 1: Single KP, multi year, multi subnat
   # Viz1: Percent
   
   output$viz1_cascade_percent <- renderPlot({
     if(input$cascade=="90-81-73"){
-      proportion_data %>%
-        mutate_if(is.numeric , replace_na, replace = 0) %>%
-        filter(casState != "sizeEst" & casState!= "prev") %>%
-        filter(KP == input$single_kp) %>%
-        filter(year %in% input$multiple_year) %>%
-        filter(city %in% input$subnat) %>%
-        arrange(year) %>%
+      viz1_prop() %>%
         ggplot(aes(x=casState, group=year)) +
           geom_col(aes(y=point_73, fill=year), position="dodge", stat="identity") +
           geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
           geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
           geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
           geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
-          geom_text(aes(y=1, label=paste(rep(nineties(), times=length(input$single_kp)*length(input$multiple_year)*length(input$subnat)), "%", sep="")), color="navy", linetype=5)+
+          geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz1_prop())/3), "%", sep="")), color="navy", linetype=5)+
           scale_y_continuous(limits=c(0,1), labels=percent)+
           scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
           theme(axis.text = element_text(size=rel(1.2)),
@@ -123,20 +120,14 @@ plots_server <- function(input, output) {
           guides(color=FALSE)+
           facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE)
     } else {
-      proportion_data %>%
-        mutate_if(is.numeric , replace_na, replace = 0) %>%
-        filter(casState != "sizeEst" & casState!= "prev") %>%
-        filter(KP == input$single_kp) %>%
-        filter(year %in% input$multiple_year) %>%
-        filter(city %in% input$subnat) %>%
-        arrange(year) %>%
+      viz1_prop() %>%
         ggplot(aes(x=casState, group=year)) +
           geom_col(aes(y=point_90, fill=year), position="dodge", stat="identity") +
           geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
           geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
           geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
           geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
-          geom_text(aes(y=1, label=paste(rep(nineties(), times=length(input$single_kp)*length(input$multiple_year)*length(input$subnat)), "%", sep="")), color="navy", linetype=5)+
+          geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz1_prop())/3), "%", sep="")), color="navy", linetype=5)+
           scale_y_continuous(limits=c(0,1), labels=percent)+
           scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
           theme(axis.text = element_text(size=rel(1.2)),
@@ -152,10 +143,7 @@ plots_server <- function(input, output) {
   output$cascade_count <- renderPlot({
     if(input$cascade=="90-81-73") {
       if(length(input$multiple_year)==1) {
-        count_data %>%
-          filter(KP == input$single_kp) %>%
-          filter(year %in% input$multiple_year) %>%
-          filter(city %in% input$subnat) %>%
+        viz1_count() %>%
           ggplot(aes(x=casState, group=year)) +
           geom_col(aes(y=point_73, fill=year), position="dodge", stat="identity") +
           geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
@@ -168,10 +156,7 @@ plots_server <- function(input, output) {
           ylab("Number of people")+
           facet_wrap(~city, scales="free", ncol=3)
       } else {
-        count_data %>%
-          filter(KP == input$single_kp) %>%
-          filter(year %in% input$multiple_year) %>%
-          filter(city %in% input$subnat) %>%
+        viz1_count() %>%
           ggplot(aes(x=casState, group=year)) +
           geom_col(aes(y=point_73, fill=year), position="dodge", stat="identity") +
           geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
@@ -242,57 +227,94 @@ plots_server <- function(input, output) {
     #Percent
   
   output$viz2_cascade_percent <- renderPlot({
-    switch(input$cascade,
-           "90-90-90" = proportion_data %>%
-             filter(casState != "sizeEst" & casState!= "prev") %>%
-             filter(KP %in% input$multiple_kp) %>%
-             filter(year == input$single_year) %>%
-             filter(city %in% input$subnat) %>%
-             ggplot(aes(x=casState, group=KP)) +
-             geom_col(aes(y=point_90, fill=KP), position="dodge", stat="identity") +
-             geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
-             geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
-             geom_segment(aes(x=1.6, xend=2.4, y=0.9, yend=0.9), color="navy", linetype=5)+
-             geom_segment(aes(x=2.6, xend=3.5, y=0.9, yend=0.9), color="navy", linetype=5)+
-             geom_text(aes(y=0.95, label="90%"), color="navy", linetype=5)+
-             scale_y_continuous(limits=c(0,1), labels=percent)+
-             scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-             theme(axis.text = element_text(size=rel(1.2)),
-                   strip.text = element_text(size=rel(1.3)))+
-             xlab("")+
-             ylab("")+
-             guides(color=FALSE)+
-             facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE),
-           "90-81-73" = proportion_data %>%
-             filter(casState != "sizeEst" & casState!= "prev") %>%
-             filter(KP %in% input$multiple_kp) %>%
-             filter(year == input$single_year) %>%
-             filter(city %in% input$subnat) %>%
-             ggplot(aes(x=casState, group=KP)) +
-             geom_col(aes(y=point_73, fill=KP), position="dodge", stat="identity") +
-             geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
-             geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
-             geom_segment(aes(x=1.6, xend=2.4, y=0.81, yend=0.81), color="navy", linetype=5)+
-             geom_segment(aes(x=2.6, xend=3.5, y=0.73, yend=0.73), color="navy", linetype=5)+
-             geom_text(aes(x=1, y=0.95, label="90%"), color="navy", linetype=5)+
-             geom_text(aes(x=2, y=0.86, label="81%"), color="navy", linetype=5)+
-             geom_text(aes(x=3, y=0.77, label="73%"), color="navy", linetype=5)+
-             scale_y_continuous(limits=c(0,1), labels=percent)+
-             scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-             theme(axis.text = element_text(size=rel(1.2)),
-                   strip.text = element_text(size=rel(1.3)))+
-             xlab("")+
-             ylab("")+
-             guides(color=FALSE)+
-             facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE)
-    )
+    if(input$cascade == "90-81-73") {
+      viz2_prop() %>%
+        ggplot(aes(x=casState, group=KP)) +
+        geom_col(aes(y=point_73, fill=KP), position="dodge", stat="identity") +
+        geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
+        geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
+        geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
+        geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
+        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz2_prop())/3), "%", sep="")), color="navy", linetype=5)+
+        scale_y_continuous(limits=c(0,1), labels=percent)+
+        scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+        theme(axis.text = element_text(size=rel(1.2)),
+              strip.text = element_text(size=rel(1.3)))+
+        xlab("")+
+        ylab("")+
+        guides(color=FALSE)+
+        facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE)
+    } else {        
+      viz2_prop() %>%
+        ggplot(aes(x=casState, group=KP)) +
+          geom_col(aes(y=point_90, fill=KP), position="dodge", stat="identity") +
+          geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
+          geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
+          geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
+          geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
+          geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz2_prop())/3), "%", sep="")), color="navy", linetype=5)+
+          scale_y_continuous(limits=c(0,1), labels=percent)+
+          scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+          theme(axis.text = element_text(size=rel(1.2)),
+                strip.text = element_text(size=rel(1.3)))+
+          xlab("")+
+          ylab("")+
+          guides(color=FALSE)+
+          facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE)
+    }
   }, height=reactive(plot_height_viz2()))
   
+  # output$viz2_cascade_percent <- renderPlot({
+  #   switch(input$cascade,
+  #          "90-90-90" = proportion_data %>%
+  #            filter(casState != "sizeEst" & casState!= "prev") %>%
+  #            filter(KP %in% input$multiple_kp) %>%
+  #            filter(year == input$single_year) %>%
+  #            filter(city %in% input$subnat) %>%
+  #            ggplot(aes(x=casState, group=KP)) +
+  #            geom_col(aes(y=point_90, fill=KP), position="dodge", stat="identity") +
+  #            geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
+  #            geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #            geom_segment(aes(x=1.6, xend=2.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #            geom_segment(aes(x=2.6, xend=3.5, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #            geom_text(aes(y=0.95, label="90%"), color="navy", linetype=5)+
+  #            scale_y_continuous(limits=c(0,1), labels=percent)+
+  #            scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+  #            theme(axis.text = element_text(size=rel(1.2)),
+  #                  strip.text = element_text(size=rel(1.3)))+
+  #            xlab("")+
+  #            ylab("")+
+  #            guides(color=FALSE)+
+  #            facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE),
+  #          "90-81-73" = proportion_data %>%
+  #            filter(casState != "sizeEst" & casState!= "prev") %>%
+  #            filter(KP %in% input$multiple_kp) %>%
+  #            filter(year == input$single_year) %>%
+  #            filter(city %in% input$subnat) %>%
+  #            ggplot(aes(x=casState, group=KP)) +
+  #            geom_col(aes(y=point_73, fill=KP), position="dodge", stat="identity") +
+  #            geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
+  #            geom_segment(aes(x=0.5, xend=1.4, y=0.9, yend=0.9), color="navy", linetype=5)+
+  #            geom_segment(aes(x=1.6, xend=2.4, y=0.81, yend=0.81), color="navy", linetype=5)+
+  #            geom_segment(aes(x=2.6, xend=3.5, y=0.73, yend=0.73), color="navy", linetype=5)+
+  #            geom_text(aes(x=1, y=0.95, label="90%"), color="navy", linetype=5)+
+  #            geom_text(aes(x=2, y=0.86, label="81%"), color="navy", linetype=5)+
+  #            geom_text(aes(x=3, y=0.77, label="73%"), color="navy", linetype=5)+
+  #            scale_y_continuous(limits=c(0,1), labels=percent)+
+  #            scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+  #            theme(axis.text = element_text(size=rel(1.2)),
+  #                  strip.text = element_text(size=rel(1.3)))+
+  #            xlab("")+
+  #            ylab("")+
+  #            guides(color=FALSE)+
+  #            facet_rep_wrap(~city, ncol=3, repeat.tick.labels = TRUE)
+  #   )
+  # }, height=reactive(plot_height_viz2()))
+  
   output$cascade_count_warning <- renderText({
-    switch(input$cascade,
-           "90-90-90" = "Size estimate visualisation only available with 90-81-73 cascade selection",
-           "90-81-73" = NULL
-    )
+    if(input$cascade != "90-81-73") {
+      "Size estimate visualisation only available with 90-81-73 cascade selection"
+    }
   })
   
   output$cascade_table_proportion <- renderDT(

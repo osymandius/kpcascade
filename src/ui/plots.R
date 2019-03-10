@@ -29,25 +29,24 @@ plots <- function() {
               div(id="select_inputs",
                 hidden(
                   div(id="single_pop_inputs",
-                      column(3, uiOutput("single_KP_option")),
-                      column(3, uiOutput("multiple_year_option"))
+                      column(3, uiOutput("single_KP_option"), uiOutput("multiple_year_option"))
                   )
                 ),
                 hidden(
                   div(id="multiple_pop_inputs",
-                      column(3, uiOutput("multiple_KP_option")),
-                      column(3, uiOutput("single_year_option"))
+                      column(3, uiOutput("multiple_KP_option"), uiOutput("single_year_option"))
                   )
                 ),
-                column(3, uiOutput("city_option")),
-                column(3, selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-73", "Custom")),
+                column(3, uiOutput("city_option"), selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-73", "Custom"))),
+                column(3, 
                   hidden(
                     div(id="custom_90s",
                       splitLayout(
                         numericInput(inputId = "first90", label = "1st 90", value=95, min=0, max=100, step=1, width="100px"), 
                         numericInput(inputId = "second90", label = "2nd 90", value=95, min=0, max=100, step=1, width="100px"), 
                         numericInput(inputId = "third90", label = "3rd 90", value=95, min=0, max=100, step=1, width="100px")
-                      )
+                      ),
+                      p("Note that the custom 90s are of the form 90-90-90, not 90-81-73 (i.e. PLHIV not used as the denominator throughout)")
                     )
                   )
                 )
