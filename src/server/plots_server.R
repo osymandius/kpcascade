@@ -20,9 +20,9 @@ plots_server <- function(input, output) {
     output$viz_option <- renderText("multiple")
   })
   
-  observeEvent(input$toggle_viz_examples, {
-    toggle("viz_examples")
-  })
+  # observeEvent(input$toggle_viz_examples, {
+  #   toggle("viz_examples")
+  # })
   
   observeEvent(input$cascade, {
     if(input$cascade=="Custom") {

@@ -2,25 +2,50 @@ plots <- function() {
   div(style="margin-left:5%; margin-right: 5%",
       h2("Visualise data"),
       br(),
-      h3("Choose viz option title"),
+      p(style="font-size:16px", "Treatment cascades are available in two configurations - comparing the progress of a single population over time, or comparing multiple populations at a single point in time. If treatment cascades for the general population are uploaded, the latter configuration can assist with the visualisation of the treatment gap."),
+      br(),
       fluidRow(
-        fluidRow(
+        splitLayout(align="center",
           # Option 1. (existing) Single pop, multiple time, multiple location
-          column(3, offset=2, actionButton(inputId = "single_pop", label="Single population")), #Find single person icon & add selected fill css/shinyjs
-          # Option 2. Single year, Multiple pops, multiple location.
-          column(3, offset=3, actionButton(inputId = "multiple_pop", label="Multiple populations")) #Find multi person icon & add selection fill css/shinyjs
-        ),
-        actionButton(inputId = "toggle_viz_examples", label="Toggle example viz"),
-        div(id="viz_examples", style="align-items: center", 
-            fluidRow(
-              column(5, "Choose this to viz 1 pop in mutliple cities over multiple years"),
-              column(5, offset=1, "Choose this to viz multiple pops in multiple cities in 1 year")            
-            ),
-            fluidRow(
-              column(5, img(style="width:100%", src="placeholder.png")),
-              column(5, offset=1, img(style="width:100%", src="placeholder.png"))
-            )
+          actionButton(inputId = "single_pop", div(
+                                                   div(style="display:inline-block",
+                                                       icon("child", "fa-2x fa-fw"), br(),
+                                                       # icon("clock", "fa-2x fa-fw"), icon("clock", "fa-2x fa-fw"), br(),
+                                                       icon("time", "fa-2x fa-fw", lib="glyphicon"), icon("time", "fa-2x fa-fw", lib="glyphicon"), br(),
+                                                       icon("home", "fa-2x fa-fw"), icon("home", "fa-2x fa-fw")
+                                                   ),
+                                                   div(style="display:inline-block",
+                                                       p(style="padding-bottom:5px", "Single population", br()),
+                                                       p(style="padding-bottom:5px", "Multiple years", br()),
+                                                       p(style="margin-bottom:0; padding-bottom:5px", "Multiple regions")
+                                                   )
+          )
+          ),
+          actionButton(inputId = "multiple_pop", div(
+                                                     div(style="display:inline-block",
+                                                         icon("child", "fa-2x fa-fw"), icon("child", "fa-2x fa-fw"), br(),
+                                                         icon("time", "fa-2x fa-fw", lib="glyphicon"), br(),
+                                                         icon("home", "fa-2x fa-fw"), icon("home", "fa-2x fa-fw")
+                                                     ),
+                                                     div(style="display:inline-block",
+                                                         p(style="padding-bottom:5px", "Multiple population", br()),
+                                                         p(style="padding-bottom:5px", "Single year", br()),
+                                                         p(style="margin-bottom:0; padding-bottom:5px", "Multiple regions")
+                                                        )
+                                                     )
+          )
         )
+        # actionButton(inputId = "toggle_viz_examples", label="Toggle example viz"),
+        # div(id="viz_examples", style="align-items: center", 
+        #     fluidRow(
+        #       column(5, "Choose this to viz 1 pop in mutliple cities over multiple years"),
+        #       column(5, offset=1, "Choose this to viz multiple pops in multiple cities in 1 year")            
+        #     ),
+        #     fluidRow(
+        #       column(5, img(style="width:100%", src="placeholder.png")),
+        #       column(5, offset=1, img(style="width:100%", src="placeholder.png"))
+        #     )
+        # )
       ),
       hr(),
       hidden(
@@ -58,7 +83,7 @@ plots <- function() {
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
                 conditionalPanel("output.viz_option == 'single'",
                   textOutput("test"),
-                  h3("Cascade by percentage SINGLE"),
+                  h3("Cascade by percentage"),
                   # uiOutput("plot.ui"),
                   plotOutput("viz1_cascade_percent"),
                   h3("Cascade by size estimate"),
@@ -66,7 +91,7 @@ plots <- function() {
                   plotOutput("cascade_count")
                 ),
                 conditionalPanel("output.viz_option == 'multiple'",
-                  h3("Cascade by percentage MULTIPLE"),
+                  h3("Cascade by percentage"),
                   plotOutput("viz2_cascade_percent"),
                   h3("Cascade by size estimate"),
                   h4("Size estimates only available with single population visualisation"),
