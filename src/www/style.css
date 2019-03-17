@@ -29,11 +29,15 @@ th, tr {
   padding-bottom: 10px;
 }
 
-.plot_height {
-  height: 800px;
+.two_row {
+  height:800px;
 }
 
-#cascade_percent {
+.three_row {
+  height: 1200px;
+}
+
+#viz1_cascade_percent, #viz2_cascade_percent, #cascade_count {
   height: auto !important;
 }
 
@@ -55,6 +59,8 @@ th, tr {
 
 .ucsf {
   width:300px;
+  margin-top:100px;
+  text-align: right;
 }
 
 .intro_text {

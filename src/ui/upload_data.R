@@ -10,7 +10,7 @@ upload_data <- function() {
           <p>Please ensure that:</p>
             <ul>
               <li>Prevalence and treatment cascade data are entered as <b>decimals</b>, not percentages</li>
-              <li>Treatment cascade data are of the form <b>90-90-90</b>, not 90-81-72</li>
+              <li>Treatment cascade data are of the form <b>90-90-90</b>, not 90-81-73</li>
               <li>Row names for the cascade status are <b>exact matches</b> to those given in the template</li>
               <li>There is only a single value for each unique combination of identification variables (e.g. No more than 1 size estimate for MSM in Pretoria in 2018)</li>
             </ul>

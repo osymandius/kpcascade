@@ -1,6 +1,6 @@
 upload_data_server <- function(input, output) {
   
-  example_data <- read.csv("example_data.csv")
+  # example_data <- read.csv("example_data.csv")
   
   output$template_download <- downloadHandler(
     filename = function() {
@@ -11,7 +11,7 @@ upload_data_server <- function(input, output) {
     }
   )
   
-  # example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data.csv")
+  example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data_dev.csv")
   
   output$data_upload_size2 <- output$data_upload_size <- renderDT(
     datatable(example_data %>%
@@ -27,11 +27,17 @@ upload_data_server <- function(input, output) {
       formatRound(columns=5:7, digits=3)
   )
   
-  output$KP_option <- renderUI({
-    selectInput(inputId = "kp", label="Choose key population(s)", choices=as.character(unique(example_data$KP)))
+  output$single_KP_option <- renderUI({
+    selectInput(inputId = "single_kp", label="Choose key population", choices=as.character(unique(example_data$KP)), selected=unique(example_data$KP)[1])
   })
-  output$year_option <- renderUI({
-    selectInput(inputId = "year", label = "Choose survey year(s)", choices=unique(example_data$Year), multiple=TRUE, selected=max(example_data$Year))
+  output$multiple_year_option <- renderUI({
+    selectInput(inputId = "multiple_year", label = "Choose survey year(s)", choices=unique(example_data$Year), multiple=TRUE, selected=max(example_data$Year))
+  })
+  output$multiple_KP_option <- renderUI({
+    selectInput(inputId = "multiple_kp", label="Choose key population(s)", multiple=TRUE, choices=as.character(unique(example_data$KP)), selected=unique(example_data$KP)[1])
+  })
+  output$single_year_option <- renderUI({
+    selectInput(inputId = "single_year", label = "Choose survey year", choices=unique(example_data$Year), selected=max(example_data$Year))
   })
   output$city_option <- renderUI({
     selectInput(inputId = "subnat", label = "Choose region(s)", multiple=TRUE, choices=as.character(unique(example_data$City.Region)), selected=as.character(unique(example_data$City.Region)[1:3]))
@@ -59,11 +65,17 @@ upload_data_server <- function(input, output) {
                 container = wide3_90(), rownames=FALSE, options = list(pageLength=999, dom='t'))
     )
     
-    output$KP_option <- renderUI({
-      selectInput(inputId = "kp", label="Choose key population(s)", choices=as.character(unique(new_data$KP)))
+    output$single_KP_option <- renderUI({
+      selectInput(inputId = "single_kp", label="Choose key population", choices=as.character(unique(new_data$KP)))
     })
-    output$year_option <- renderUI({
-      selectInput(inputId = "year", label = "Choose survey year(s)", choices=as.character(unique(new_data$Year)), multiple=TRUE, selected=as.character(max(new_data$Year)))
+    output$multiple_year_option <- renderUI({
+      selectInput(inputId = "multiple_year", label = "Choose survey year(s)", choices=unique(new_data$Year), multiple=TRUE, selected=max(new_data$Year))
+    })
+    output$multiple_KP_option <- renderUI({
+      selectInput(inputId = "multiple_kp", label="Choose key population(s)", multiple=TRUE, choices=as.character(unique(new_data$KP)))
+    })
+    output$single_year_option <- renderUI({
+      selectInput(inputId = "single_year", label = "Choose survey year", choices=unique(new_data$Year), selected=max(new_data$Year))
     })
     output$city_option <- renderUI({
       selectInput(inputId = "subnat", label = "Choose region(s)", multiple=TRUE, choices=as.character(unique(new_data$City.Region)), selected=as.character(unique(new_data$City.Region)[1:3]))
