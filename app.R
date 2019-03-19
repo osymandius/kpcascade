@@ -14,7 +14,6 @@ source("src/server/plots_server.R")
 
 source("src/ui/navigation.R")
 source("src/ui/landing.R")
-source("src/ui/introduction.R")
 source("src/ui/upload_data.R")
 source("src/ui/plots.R")
 source("src/ui/about.R")
