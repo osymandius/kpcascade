@@ -1,17 +1,17 @@
 upload_data_server <- function(input, output) {
   
-  # example_data <- read.csv("example_data.csv")
+  example_data <- read.csv("example_data.csv")
   
   output$template_download <- downloadHandler(
     filename = function() {
       paste("KP_cascade_template.csv", sep='')
     },
     content = function (con) {
-      write.csv(example_data, con, na="", row.names = FALSE)
+      write.csv(example_data, con, na="")
     }
   )
   
-  example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data_dev.csv")
+  # example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data_dev.csv")
   
   output$data_upload_size2 <- output$data_upload_size <- renderDT(
     datatable(example_data %>%

@@ -5,3 +5,4 @@ packages:
  - reshape2
  - scales
  - lemon
+ - shinyjs

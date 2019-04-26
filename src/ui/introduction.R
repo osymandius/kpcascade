@@ -1,36 +1,8 @@
 introduction <- function() {
   fluidRow(
-    splitLayout(
-      cellWidths = c("50%", "50%"),
-      style="margin-left: 30px; margin-right: 30px; margin-bottom: 30px",
-      img(class="sanac", src='SANAC.jpg'),
-      img(class="ucsf", style="align: right", src="UCSF.jpg")
-    ),
-    column(8, offset=4, h1("KPCascade")),
-    br(),
-    div(class="intro_text",
-      column(8, offset=2, HTML("<p style='text-align:center; font-size: 20px'>KPCascade assists with the visualisation of HIV treatment cascades in key populations.</p>"))
+    div(style="margin-left: 10%; margin-right: 10%; font-size:14px",
+      p("Cascades are a method that is used to outline the steps of care that people go through when accessing a health service. HIV care & treatment cascades reflect the pathway people living with HIV go through from diagnosis towards achieving viral suppression. The cascade graphs depict the proportion of people engaged at each stage of the care pathway."),
+      p("This site provides an interactive platform to upload and visualise available South African Key Population (KP) surveillance data. The South African National AIDS Council (SANAC) hosts the site, which was developed in collaboration between the University of California, San Francisco and Imperial College London. Surveillance data inputs include data from the South African Health Monitoring Survey (SAHMS) with Female Sex Workers (FSW), 2013-14 and 2017-18). These studies have been conducted in an academic partnership between the University of California, San Francisco, the Anova Health Institute, the Aurum Institute, the Wits Reproductive Health and HIV Research Institute and the Human Sciences Research Council.")
     )
   )
 }
-    
-  #   div(class="title",
-  #       column(2, img(class="sanac", src='SANAC.jpg')),
-  #       column(2, h1("KPCascade")),
-  #       column(2, img(class="ucsf", src="UCSF.jpg"))
-  #   )
-  # fluidRow(
-  #   div(class="intro_text",
-  #     column(8, offset=2, HTML("
-  #                       <p style='text-align:center; font-size: 20px'>KPCascade assists with the visualisation of HIV treatment cascades in key populations.</p>
-  #                     ")
-  #     )
-  #   )
-  # ),
-  # fluidRow(
-  #   splitLayout(
-  #     
-  #   )
-  # )
-  # )
-# }
