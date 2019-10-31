@@ -53,7 +53,8 @@ proportion_manip <- function(cleaned_data) {
                                      ifelse(casState == "prev", ul_90[casState=="prev"], 
                                             ifelse(casState == "aware", ul_90[casState=="aware"], 
                                                    ifelse(casState == "onART", ul_90[casState=="aware"]*ul_90[casState=="onART"], 
-                                                          ifelse(casState == "vSupp", ul_90[casState=="aware"]*ul_90[casState=="onART"]*ul_90[casState=="vSupp"], "")))))))
+                                                          ifelse(casState == "vSupp", ul_90[casState=="aware"]*ul_90[casState=="onART"]*ul_90[casState=="vSupp"], ""))))))) %>%
+    ungroup
   
   return(proportion_data)
   
@@ -83,7 +84,8 @@ count_manip <- function(proportion_data) {
     mutate(count_target = as.numeric(ifelse(casState == "aware", point_73[casState=="prev"]*0.9, 
                                             ifelse(casState == "onART", point_73[casState=="prev"] * 0.81, 
                                                    ifelse(casState == "vSupp", point_73[casState=="prev"]*0.73, ""))))) %>%
-    mutate(x=as.numeric(casState)-0.5, xend = as.numeric(casState)+0.5)
+    mutate(x=as.numeric(casState)-0.5, xend = as.numeric(casState)+0.5) %>%
+    ungroup
   
   return(count_data)
   

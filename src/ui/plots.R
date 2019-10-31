@@ -82,10 +82,12 @@ plots <- function() {
             tabsetPanel(
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
                 conditionalPanel("output.viz_option == 'single'",
-                  textOutput("test"),
+                  #textOutput("city_option"),
                   h3("Cascade by percentage"),
+                  #textOutput("city_option"),
                   # uiOutput("plot.ui"),
-                  plotOutput("viz1_cascade_percent"),
+                  # plotOutput("viz1_cascade_percent"),
+                  plotlyOutput("viz1_cascade_percent"),
                   h3("Cascade by size estimate"),
                   h4(textOutput("cascade_count_warning")),
                   plotOutput("cascade_count")
