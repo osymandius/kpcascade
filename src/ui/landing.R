@@ -3,10 +3,11 @@ landing <- function() {
     div(style="margin-right:50px",
         splitLayout(align="center",
                     style="display: flex; justify-content: space-around; align-items: center; margin-top:50px",
-                    cellWidths = c("33.3%", "33.3%", "33.3%"),
-                    img(style="width:250px", src='SANAC.jpg'),
-                    img(style="width:350px", src="UCSF.jpg"),
-                    img(style="width:350px", src='imperial.png')
+                    cellWidths = rep("25%", 4),
+                    img(style="width:200px", src='SANAC.jpg'),
+                    img(style="width:250px", src="UCSF.jpg"),
+                    img(style="width:250px", src='imperial.png'),
+                    img(style="width:250px", src='pepfar.png')
         )
     ),
     h1(align="center", "KPCascade"),

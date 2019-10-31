@@ -5,6 +5,8 @@ library(reshape2)
 library(scales)
 library(lemon)
 library(shinyjs)
+library(plotly)
+library(stringr)
 
 source("src/data_manip.R")
 
