@@ -113,53 +113,14 @@ plots_server <- function(input, output) {
   
   #### Viz 1: Single KP, multi year, multi subnat
   # Viz1: Percent
-  
-  output$viz1_cascade_percent <- renderPlotly({
-    ggplotly(
-    if(input$cascade=="90-81-73"){
-      viz1_prop() %>%
-        ggplot(aes(x=casState, fill=year, group=year)) +
-        geom_bar(aes(y=point_73), position=position_dodge(), stat="identity") +
-        geom_errorbar(aes(ymin=ll_73, ymax=ul_73))+
-        geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
-        geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
-        geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
-        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz1_prop())/3), "%", sep="")), color="navy")+
-        scale_y_continuous(limits=c(0,1), labels=percent)+
-        scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-        theme(axis.text = element_text(size=rel(1.2)),
-              strip.text = element_text(size=rel(1.3)))+
-        xlab("")+
-        ylab("")+
-        guides(color=FALSE)+
-        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
-    } else {
-      viz1_prop() %>%
-        ggplot(aes(x=casState, fill=year, group=year)) +
-        geom_bar(aes(y=point_90), position=position_dodge(), stat="identity")+
-        geom_errorbar(aes(ymin=ll_90, ymax=ul_90))+
-        geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
-        geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
-        geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
-        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz1_prop())/3), "%", sep="")), color="navy")+
-        scale_y_continuous(limits=c(0,1), labels=percent)+
-        scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
-        coord_cartesian(clip = 'off') +
-        theme(axis.text = element_text(size=rel(1.2)),
-              strip.text = element_text(size=rel(1.3)))+
-        xlab("")+
-        ylab("")+
-        guides(color=FALSE)+
-        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
-    })
-  })
   # 
-  # output$viz1_cascade_percent <- renderPlot({
+  # output$viz1_cascade_percent <- renderPlotly({
+  #   ggplotly(
   #   if(input$cascade=="90-81-73"){
   #     viz1_prop() %>%
-  #       ggplot(aes(x=casState, group=year)) +
-  #       geom_col(aes(y=point_73, fill=year), position="dodge", stat="identity") +
-  #       geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
+  #       ggplot(aes(x=casState, fill=year, group=year)) +
+  #       geom_bar(aes(y=point_73), position=position_dodge(), stat="identity") +
+  #       geom_errorbar(aes(ymin=ll_73, ymax=ul_73))+
   #       geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
   #       geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
   #       geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
@@ -174,9 +135,9 @@ plots_server <- function(input, output) {
   #       facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
   #   } else {
   #     viz1_prop() %>%
-  #       ggplot(aes(x=casState, group=year)) +
-  #       geom_col(aes(y=point_90, fill=year), position="dodge", stat="identity") +
-  #       geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
+  #       ggplot(aes(x=casState, fill=year, group=year)) +
+  #       geom_bar(aes(y=point_90), position=position_dodge(), stat="identity")+
+  #       geom_errorbar(aes(ymin=ll_90, ymax=ul_90))+
   #       geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
   #       geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
   #       geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
@@ -190,8 +151,47 @@ plots_server <- function(input, output) {
   #       ylab("")+
   #       guides(color=FALSE)+
   #       facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
-  #   }
-  # }, height=reactive(plot_height_viz1()), width=reactive(plot_width_viz1()))
+  #   })
+  # })
+  # 
+  output$viz1_cascade_percent <- renderPlot({
+    if(input$cascade=="90-81-73"){
+      viz1_prop() %>%
+        ggplot(aes(x=casState, group=year)) +
+        geom_col(aes(y=point_73, fill=year), position="dodge", stat="identity") +
+        geom_errorbar(aes(ymin=ll_73, ymax=ul_73), width=0.2, position=position_dodge(1))+
+        geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
+        geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
+        geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
+        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz1_prop())/3), "%", sep="")), color="navy")+
+        scale_y_continuous(limits=c(0,1), labels=percent)+
+        scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+        theme(axis.text = element_text(size=rel(1.2)),
+              strip.text = element_text(size=rel(1.3)))+
+        xlab("")+
+        ylab("")+
+        guides(color=FALSE)+
+        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
+    } else {
+      viz1_prop() %>%
+        ggplot(aes(x=casState, group=year)) +
+        geom_col(aes(y=point_90, fill=year), position="dodge", stat="identity") +
+        geom_errorbar(aes(ymin=ll_90, ymax=ul_90), width=0.2, position=position_dodge(1))+
+        geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
+        geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
+        geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
+        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz1_prop())/3), "%", sep="")), color="navy")+
+        scale_y_continuous(limits=c(0,1), labels=percent)+
+        scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
+        coord_cartesian(clip = 'off') +
+        theme(axis.text = element_text(size=rel(1.2)),
+              strip.text = element_text(size=rel(1.3)))+
+        xlab("")+
+        ylab("")+
+        guides(color=FALSE)+
+        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
+    }
+  }, height=reactive(plot_height_viz1()), width=reactive(plot_width_viz1()))
   # 
   #Viz 1: Count
   output$cascade_count <- renderPlot({

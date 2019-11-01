@@ -50,56 +50,61 @@ plots <- function() {
       hr(),
       hidden(
         div(id="main_plot_body",
-            fluidRow(
-              div(id="select_inputs",
-                hidden(
-                  div(id="single_pop_inputs",
-                      column(3, uiOutput("single_KP_option"), uiOutput("multiple_year_option"))
-                  )
-                ),
-                hidden(
-                  div(id="multiple_pop_inputs",
-                      column(3, uiOutput("multiple_KP_option"), uiOutput("single_year_option"))
-                  )
-                ),
-                column(3, uiOutput("city_option"), selectInput(inputId = "cascade", label = "Choose cascade type", choices=c("90-90-90", "90-81-73", "Custom"))),
-                column(3, 
+            div(id="select_inputs",
+                fluidRow(
                   hidden(
-                    div(id="custom_90s",
-                      splitLayout(
-                        numericInput(inputId = "first90", label = "1st 90", value=95, min=0, max=100, step=1, width="100px"), 
-                        numericInput(inputId = "second90", label = "2nd 90", value=95, min=0, max=100, step=1, width="100px"), 
-                        numericInput(inputId = "third90", label = "3rd 90", value=95, min=0, max=100, step=1, width="100px")
-                      ),
-                      p("Note that the custom 90s are of the form 90-90-90, not 90-81-73 (i.e. PLHIV not used as the denominator throughout)")
+                    div(id="single_pop_inputs",
+                        column(2, uiOutput("single_KP_option")),
+                        column(2, uiOutput("multiple_year_option"))
                     )
+                  ),
+                  hidden(
+                    div(id="multiple_pop_inputs",
+                        column(2, uiOutput("multiple_KP_option")),
+                        column(2, uiOutput("single_year_option"))
+                    )
+                  ),
+                  column(3, uiOutput("city_option")),
+                  column(2, selectInput(inputId = "cascade", label = "Cascade type", choices=c("90-90-90", "90-81-73", "Custom")))
+                ),
+                fluidRow(
+                  column(5, 
+                         hidden(
+                           div(id="custom_90s",
+                               splitLayout(
+                                 numericInput(inputId = "first90", label = "1st 90", value=95, min=0, max=100, step=1, width="100px"), 
+                                 numericInput(inputId = "second90", label = "2nd 90", value=95, min=0, max=100, step=1, width="100px"), 
+                                 numericInput(inputId = "third90", label = "3rd 90", value=95, min=0, max=100, step=1, width="100px")
+                               ),
+                               p("Note that the custom 90s are of the form 90-90-90, not 90-81-73 (i.e. PLHIV not used as the denominator throughout)")
+                           )
+                         )
                   )
-                )
-              )
+                ),
             ),
             textOutput("test2"),
             div(style="font-size:0px", textOutput("viz_option")),
             tabsetPanel(
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
-                conditionalPanel("output.viz_option == 'single'",
-                  #textOutput("city_option"),
-                  h3("Cascade by percentage"),
-                  #textOutput("city_option"),
-                  # uiOutput("plot.ui"),
-                  # plotOutput("viz1_cascade_percent"),
-                  plotlyOutput("viz1_cascade_percent"),
-                  h3("Cascade by size estimate"),
-                  h4(textOutput("cascade_count_warning")),
-                  plotOutput("cascade_count")
-                ),
-                conditionalPanel("output.viz_option == 'multiple'",
-                  h3("Cascade by percentage"),
-                  plotOutput("viz2_cascade_percent"),
-                  h3("Cascade by size estimate"),
-                  h4("Size estimates only available with single population visualisation"),
-                  br(),
-                  br()
-                )
+                       conditionalPanel("output.viz_option == 'single'",
+                                        #textOutput("city_option"),
+                                        h3("Cascade by percentage"),
+                                        #textOutput("city_option"),
+                                        # uiOutput("plot.ui"),
+                                        plotOutput("viz1_cascade_percent"),
+                                        #plotlyOutput("viz1_cascade_percent"),
+                                        h3("Cascade by size estimate"),
+                                        h4(textOutput("cascade_count_warning")),
+                                        plotOutput("cascade_count")
+                       ),
+                       conditionalPanel("output.viz_option == 'multiple'",
+                                        h3("Cascade by percentage"),
+                                        plotOutput("viz2_cascade_percent"),
+                                        h3("Cascade by size estimate"),
+                                        h4("Size estimates only available with single population visualisation"),
+                                        br(),
+                                        br()
+                       )
               ),
               tabPanel(title = HTML("<b style='font-size:18px'>Data</b>"),
                        br(),

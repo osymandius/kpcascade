@@ -6,7 +6,7 @@ upload_data <- function() {
         <h2 style='margin-left:10%'>Upload data</h3>
         <br>
         <div style='font-size:16px; margin-left: 10%; margin-right:10%'>
-          <p><b>KPCascade</b> has data preloaded from locations for FSW, MSM and PWID from several years - displayed below. If you would like to upload additional data, please download the template below and then upload the amended file.<p>
+          <p><b>KPCascade</b> has data preloaded from locations for FSW, MSM and PWID from several years - displayed below. If you would like to upload additional data, please download the default data below as a template and then upload the amended file.<p>
           <p>Please ensure that:</p>
             <ul>
               <li>Prevalence and treatment cascade data are entered as <b>decimals</b>, not percentages</li>
@@ -19,17 +19,19 @@ upload_data <- function() {
       ")
     ),
     fluidRow(
-      column(3, offset = 1, downloadButton(outputId = "template_download", label = "Download template")),
+      column(3, offset = 1, downloadButton(outputId = "template_download", label = "Download default data")),
       column(3, fileInput('data_input', 'Upload data', accept = '.csv')),
-      column(3, offset = 1 ,actionButton("resetToExampleData", label = "Reset to preloaded data"))
+      column(3, offset = 1 ,actionButton("resetToExampleData", label = "Reset to default data"))
     ),
-    fluidRow(
-      column(9, offset=1, h4("Size estimate data"))
-    ),
-    column(8, offset=1, DTOutput(outputId = "data_upload_size")),
-    fluidRow(
-      column(style = "margin-top: 25px;", width = 9, offset = 1, h4("Prevalence and treatment cascade data"))
-    ),
-    column(8, offset=1, DTOutput(outputId = "data_upload_prop"))
+    tabsetPanel(
+      tabPanel(title = HTML("<b style='font-size:18px'>Size estimates</b>"),
+          fluidRow(
+            column(10, offset=1, DTOutput(outputId = "data_upload_size"))
+          )
+      ),
+      tabPanel(title = HTML("<b style='font-size:18px'>Cascade data</b>"),
+        column(10, offset=1, DTOutput(outputId = "data_upload_prop"))
+      )
+    )
   )
 }
