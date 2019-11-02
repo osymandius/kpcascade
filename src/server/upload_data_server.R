@@ -10,19 +10,19 @@ upload_data_server <- function(input, output) {
   #example_data <- read.csv("~/Documents/GitHub/kpcascade/src/example_data_dev.csv", stringsAsFactors = FALSE) %>%
   #  arrange(Province)
   
-  subnational_input_choices <- example_data %>%
-    select(Province, District) %>%
-    group_by(Province, District) %>%
-    summarise() %>%
-    ungroup %>%
-    arrange(Province, District) %>%
-    group_split(Province, keep=FALSE) %>%
-    `names<-`(unique(example_data$Province)) %>%
-    lapply(unlist) %>%
-    lapply(function(x) {
-      x %>%
-        `names<-` (x)
-    })
+  # subnational_input_choices <- example_data %>%
+  #   select(Province, District) %>%
+  #   group_by(Province, District) %>%
+  #   summarise() %>%
+  #   ungroup %>%
+  #   arrange(Province, District) %>%
+  #   group_split(Province, keep=FALSE) %>%
+  #   `names<-`(unique(example_data$Province)) %>%
+  #   lapply(unlist) %>%
+  #   lapply(function(x) {
+  #     x %>%
+  #       `names<-` (x)
+  #   })
   
   output$template_download <- downloadHandler(
     filename = function() {
@@ -50,17 +50,13 @@ upload_data_server <- function(input, output) {
   )
   
   output$single_KP_option <- renderUI({
-    selectInput(inputId = "single_kp", label="1) Key population", choices=as.character(unique(example_data$KP)), selected=unique(example_data$KP)[1])
+    selectizeInput(inputId = "single_kp", label="1) Key population", choices=c("Choose KP" = "", as.character(unique(example_data$KP))), selected=NULL)
   })
   
-  # output$multiple_year_option <- renderUI({
-  #   selectInput(inputId = "multiple_year", label = "Choose survey year(s)", choices=unique(example_data$Year), multiple=TRUE, selected=example_data$Year[1])
-  # })
-  
   output$multiple_year_option <- renderUI({
-    selected <- example_data$Year[1]
-    if(is.null(selected)) selected <- unique(example_data$Year)[1]
-    selectInput(inputId = "multiple_year", label = "2) Survey year(s)", choices=unique(example_data$Year), multiple=TRUE, selected=selected)
+    # selected <- example_data$Year[1]
+    # if(is.null(selected)) selected <- unique(example_data$Year)[1]
+    selectizeInput(inputId = "multiple_year", label = "3) Survey year(s)", choices=NULL, multiple=TRUE, selected=NULL)
   })
   
   output$multiple_KP_option <- renderUI({
@@ -68,11 +64,15 @@ upload_data_server <- function(input, output) {
   })
   
   output$single_year_option <- renderUI({
-    selectInput(inputId = "single_year", label = "2) Survey year", choices=sort(unique(example_data$Year)), selected=example_data$Year[1])
+    selectInput(inputId = "single_year", label = "3) Survey year", choices=NULL, selected=NULL)
   })
   
-  output$city_option <- renderUI({
-    selectizeInput(inputId = "subnat", label = "3) District(s)", multiple=TRUE, choices=subnational_input_choices, selected=as.character(unique(example_data$District)[1:3]))
+  output$subnat_option1 <- renderUI({
+    selectizeInput(inputId = "subnat1", label = "2) District(s)", multiple=TRUE, choices=NULL, selected=NULL)
+  })
+  
+  output$subnat_option2 <- renderUI({
+    selectizeInput(inputId = "subnat2", label = "2) District(s)", multiple=TRUE, choices=NULL, selected=NULL)
   })
   
   ## Updating input choices
@@ -101,32 +101,83 @@ upload_data_server <- function(input, output) {
           `names<-` (x)
       })
 
-    updateSelectInput(session = getDefaultReactiveDomain(), inputId = "multiple_year", choices = year_input_choices, selected = NULL)
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "multiple_year", choices = year_input_choices, selected = NULL)
     
-    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat", choices = subnational_input_choices, selected = NULL)
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat1", choices = c("Choose district" = "", subnational_input_choices), selected = NULL)
 
   })
   
-  observeEvent(input$multiple_year, {
+  observeEvent(input$subnat1, {
+    
+    year_input_choices <- proportion_data %>%
+      filter(KP %in% input$single_kp, district %in% input$subnat1) %>%
+      .$year %>%
+      unique %>%
+      as.numeric %>%
+      sort(decreasing = TRUE)
+    
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "multiple_year", choices = year_input_choices, selected = year_input_choices)
+    
+  })
+  
+####### Multiple population view input updates
+  
+  observeEvent(input$multiple_kp, {
+    
+    year_input_choices <- proportion_data %>%
+      group_by(year) %>% 
+      filter(all(c(input$multiple_kp) %in% KP)) %>%
+      ungroup %>%
+      .$year %>%
+      unique %>%
+      as.numeric %>%
+      sort(decreasing = TRUE)
     
     subnational_input_choices <- proportion_data %>%
-      filter(year %in% input$multiple_year, KP %in% input$single_kp) %>%
+      group_by(year) %>% 
+      filter(all(c(input$multiple_kp) %in% KP)) %>%
+      ungroup %>%
       select(province, district) %>%
       group_by(province, district) %>%
       summarise() %>%
       ungroup %>%
       arrange(province, district) %>%
       group_split(province, keep=FALSE) %>%
-      `names<-`(unique(proportion_data %>% filter(year %in% input$multiple_year, KP %in% input$single_kp) %>% .$province)) %>%
+      `names<-`(unique(proportion_data %>%
+                         group_by(year) %>% 
+                         filter(all(c(input$multiple_kp) %in% KP)) %>%
+                         ungroup %>%
+                         .$province)) %>%
       lapply(unlist) %>%
       lapply(function(x) {
         x %>%
           `names<-` (x)
       })
     
-    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat", choices = subnational_input_choices, selected = NULL)
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "single_year", choices = year_input_choices, selected = NULL)
+    
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat2", choices = subnational_input_choices, selected = NULL)
     
   })
+  
+  
+  
+  observeEvent(input$subnat2, {
+    
+    year_input_choices <- proportion_data %>%
+      filter(district %in% input$subnat2) %>%
+      group_by(year) %>% 
+      filter(all(c(input$multiple_kp) %in% KP)) %>%
+      .$year %>%
+      unique %>%
+      as.numeric %>%
+      sort(decreasing = TRUE)
+    
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "single_year", choices = year_input_choices, selected = year_input_choices)
+    
+  })
+  
+#####
   
   observeEvent(input$data_input, {
     inFile <- input$data_input

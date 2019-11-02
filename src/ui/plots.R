@@ -53,18 +53,19 @@ plots <- function() {
             div(id="select_inputs",
                 fluidRow(
                   hidden(
-                    div(id="single_pop_inputs",
+                    div(id="single_pop_kp",
                         column(2, uiOutput("single_KP_option")),
+                        column(3, uiOutput("subnat_option1")),
                         column(2, uiOutput("multiple_year_option"))
                     )
                   ),
                   hidden(
-                    div(id="multiple_pop_inputs",
+                    div(id="multiple_pop_kp",
                         column(2, uiOutput("multiple_KP_option")),
+                        column(3, uiOutput("subnat_option2")),
                         column(2, uiOutput("single_year_option"))
                     )
                   ),
-                  column(3, uiOutput("city_option")),
                   column(2, selectInput(inputId = "cascade", label = "Cascade type", choices=c("90-90-90", "90-81-73", "Custom")))
                 ),
                 fluidRow(

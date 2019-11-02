@@ -6,8 +6,10 @@ plots_server <- function(input, output) {
     hide("viz_examples")
     show("main_plot_body")
     show("select_inputs")
-    show("single_pop_inputs")
-    hide("multiple_pop_inputs")
+    show("single_pop_kp")
+    show("single_pop_year")
+    hide("multiple_pop_kp")
+    hide("multiple_pop_year")
     output$viz_option <- renderText("single")
   })
   
@@ -15,8 +17,10 @@ plots_server <- function(input, output) {
     hide("viz_examples")
     show("main_plot_body")
     show("select_inputs")
-    show("multiple_pop_inputs")
-    hide("single_pop_inputs")
+    hide("single_pop_kp")
+    hide("single_pop_year")
+    show("multiple_pop_kp")
+    show("multiple_pop_year")
     output$viz_option <- renderText("multiple")
   })
   
@@ -53,7 +57,7 @@ plots_server <- function(input, output) {
     nrow(proportion_data %>%
                    filter(KP == input$single_kp) %>%
                    filter(year %in% input$multiple_year) %>%
-                   filter(district %in% input$subnat) %>%
+                   filter(district %in% input$subnat1) %>%
                    group_by(district) %>%
                    summarise()
     )
@@ -72,7 +76,7 @@ plots_server <- function(input, output) {
     nrow(proportion_data %>%
                    filter(KP %in% input$multiple_kp) %>%
                    filter(year == input$single_year) %>%
-                   filter(district %in% input$subnat) %>%
+                   filter(district %in% input$subnat2) %>%
                    group_by(district) %>%
                    summarise()
     )
@@ -93,7 +97,7 @@ plots_server <- function(input, output) {
       filter(casState != "sizeEst" & casState!= "prev") %>%
       filter(KP == input$single_kp) %>%
       filter(year %in% input$multiple_year) %>%
-      filter(district %in% input$subnat)
+      filter(district %in% input$subnat1)
   )
   
   viz2_prop <- reactive(
@@ -101,14 +105,14 @@ plots_server <- function(input, output) {
       filter(casState != "sizeEst" & casState!= "prev") %>%
       filter(KP %in% input$multiple_kp) %>%
       filter(year == input$single_year) %>%
-      filter(district %in% input$subnat)
+      filter(district %in% input$subnat2)
   )
   
   viz1_count <- reactive(
     count_data %>%
       filter(KP == input$single_kp) %>%
       filter(year %in% input$multiple_year) %>%
-      filter(district %in% input$subnat)
+      filter(district %in% input$subnat1)
   )
   
   #### Viz 1: Single KP, multi year, multi subnat
