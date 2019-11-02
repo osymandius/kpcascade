@@ -60,11 +60,11 @@ upload_data_server <- function(input, output) {
   })
   
   output$multiple_KP_option <- renderUI({
-    selectInput(inputId = "multiple_kp", label="1) Key population(s)", multiple=TRUE, choices=as.character(unique(example_data$KP)), selected=unique(example_data$KP)[1])
+    selectizeInput(inputId = "multiple_kp", label="1) Key population(s)", multiple=TRUE, choices=as.character(unique(example_data$KP)), selected=NULL)
   })
   
   output$single_year_option <- renderUI({
-    selectInput(inputId = "single_year", label = "3) Survey year", choices=NULL, selected=NULL)
+    selectizeInput(inputId = "single_year", label = "3) Survey year", choices=NULL, selected=NULL)
   })
   
   output$subnat_option1 <- renderUI({
@@ -73,6 +73,10 @@ upload_data_server <- function(input, output) {
   
   output$subnat_option2 <- renderUI({
     selectizeInput(inputId = "subnat2", label = "2) District(s)", multiple=TRUE, choices=NULL, selected=NULL)
+  })
+  
+  output$cascade_option <- renderUI({
+    selectizeInput(inputId = "cascade", label = "Cascade type", choices=c("90-90-90", "90-81-73", "Custom"), selected=NULL)
   })
   
   ## Updating input choices
@@ -104,6 +108,7 @@ upload_data_server <- function(input, output) {
     updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "multiple_year", choices = year_input_choices, selected = NULL)
     
     updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat1", choices = c("Choose district" = "", subnational_input_choices), selected = NULL)
+  
 
   })
   
@@ -116,7 +121,20 @@ upload_data_server <- function(input, output) {
       as.numeric %>%
       sort(decreasing = TRUE)
     
-    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "multiple_year", choices = year_input_choices, selected = year_input_choices)
+    logic_73 <- proportion_data %>%
+      filter(KP %in% input$single_kp, district %in% input$subnat1) %>%
+      .$cas90_81_73 %>%
+      unique %>%
+      isFALSE
+    
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "multiple_year", choices = year_input_choices, selected = year_input_choices[1])
+    
+    if(logic_73) {
+      updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "cascade", choices=c("90-90-90", "90-81-73", "Custom"), selected="90-90-90")
+    } else {
+      updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "cascade", choices=c("90-90-90", "90-81-73", "Custom"), selected="90-81-73")
+    }
+    
     
   })
   
@@ -156,7 +174,7 @@ upload_data_server <- function(input, output) {
     
     updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "single_year", choices = year_input_choices, selected = NULL)
     
-    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat2", choices = subnational_input_choices, selected = NULL)
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "subnat2", choices = c("Choose district" = "", subnational_input_choices), selected = NULL)
     
   })
   
@@ -173,7 +191,7 @@ upload_data_server <- function(input, output) {
       as.numeric %>%
       sort(decreasing = TRUE)
     
-    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "single_year", choices = year_input_choices, selected = year_input_choices)
+    updateSelectizeInput(session = getDefaultReactiveDomain(), inputId = "single_year", choices = year_input_choices, selected = year_input_choices[1])
     
   })
   

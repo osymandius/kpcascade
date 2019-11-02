@@ -115,6 +115,16 @@ plots_server <- function(input, output) {
       filter(district %in% input$subnat1)
   )
   
+  observeEvent(input$single_kp, {
+    print(paste0(input$single_kp))
+  })
+  observeEvent(input$multiple_year, {
+    print(paste0(input$multiple_year))
+  })
+  observeEvent(input$subnat1, {
+    print(paste0(input$subnat1))
+  })
+  
   #### Viz 1: Single KP, multi year, multi subnat
   # Viz1: Percent
   # 
@@ -159,6 +169,7 @@ plots_server <- function(input, output) {
   # })
   # 
   output$viz1_cascade_percent <- renderPlot({
+    
     if(input$cascade=="90-81-73"){
       viz1_prop() %>%
         ggplot(aes(x=casState, group=year)) +
@@ -172,10 +183,17 @@ plots_server <- function(input, output) {
         scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
         theme(axis.text = element_text(size=rel(1.2)),
               strip.text = element_text(size=rel(1.3)))+
-        xlab("")+
-        ylab("")+
+        labs(x=element_blank(), y=element_blank(), fill="Year") +
         guides(color=FALSE)+
-        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
+        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE) +
+        theme_light() +
+        theme(
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size=12),
+          axis.text = element_text(size=14),
+          strip.text = element_text(size=14, margin = margin(0,0,10,0, unit = "pt"), hjust=0.05, color = "black", face="bold"),
+          strip.background = element_blank()
+         )
     } else {
       viz1_prop() %>%
         ggplot(aes(x=casState, group=year)) +
@@ -193,7 +211,15 @@ plots_server <- function(input, output) {
         xlab("")+
         ylab("")+
         guides(color=FALSE)+
-        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
+        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE) +
+        theme_light() +
+        theme(
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size=12),
+          axis.text = element_text(size=14),
+          strip.text = element_text(size=14, margin = margin(0,0,10,0, unit = "pt"), hjust=0.05, color = "black", face="bold"),
+          strip.background = element_blank()
+        )
     }
   }, height=reactive(plot_height_viz1()), width=reactive(plot_width_viz1()))
   # 
@@ -212,7 +238,15 @@ plots_server <- function(input, output) {
           xlab("")+
           guides(color=FALSE)+
           ylab("Number of people")+
-          facet_wrap(~district, scales="free", ncol=3)
+          facet_wrap(~district, scales="free", ncol=3)  +
+          theme_light() +
+          theme(
+            legend.text = element_text(size = 12),
+            legend.title = element_text(size=12),
+            axis.text = element_text(size=14),
+            strip.text = element_text(size=14, margin = margin(0,0,10,0, unit = "pt"), hjust=0.05, color = "black", face="bold"),
+            strip.background = element_blank()
+          )
       } else {
         viz1_count() %>%
           ggplot(aes(x=casState, group=year)) +
@@ -223,7 +257,15 @@ plots_server <- function(input, output) {
                 strip.text = element_text(size=rel(1.3)))+
           xlab("")+
           ylab("Number of people")+
-          facet_wrap(~district, scales="free", ncol=3)
+          facet_wrap(~district, scales="free", ncol=3) +
+          theme_light() +
+          theme(
+            legend.text = element_text(size = 12),
+            legend.title = element_text(size=12),
+            axis.text = element_text(size=14),
+            strip.text = element_text(size=14, margin = margin(0,0,10,0, unit = "pt"), hjust=0.05, color = "black", face="bold"),
+            strip.background = element_blank()
+          )
       }
     } else {
       NULL
@@ -243,7 +285,7 @@ plots_server <- function(input, output) {
         geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
         geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
         geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
-        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz2_prop())/3), "%", sep="")), color="navy", linetype=5)+
+        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz2_prop())/3), "%", sep="")), color="navy")+
         scale_y_continuous(limits=c(0,1), labels=percent)+
         scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
         theme(axis.text = element_text(size=rel(1.2)),
@@ -251,7 +293,15 @@ plots_server <- function(input, output) {
         xlab("")+
         ylab("")+
         guides(color=FALSE)+
-        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
+        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)  +
+        theme_light() +
+        theme(
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size=12),
+          axis.text = element_text(size=14),
+          strip.text = element_text(size=14, margin = margin(0,0,10,0, unit = "pt"), hjust=0.05, color = "black", face="bold"),
+          strip.background = element_blank()
+        )
     } else {        
       viz2_prop() %>%
         ggplot(aes(x=casState, group=KP)) +
@@ -260,7 +310,7 @@ plots_server <- function(input, output) {
         geom_segment(aes(x=0.5, xend=1.4, y=nineties()[1]/100, yend=nineties()[1]/100), color="navy", linetype=5)+
         geom_segment(aes(x=1.6, xend=2.4, y=nineties()[2]/100, yend=nineties()[2]/100), color="navy", linetype=5)+
         geom_segment(aes(x=2.6, xend=3.5, y=nineties()[3]/100, yend=nineties()[3]/100), color="navy", linetype=5)+
-        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz2_prop())/3), "%", sep="")), color="navy", linetype=5)+
+        geom_text(aes(y=1, label=paste(rep(nineties(), times=nrow(viz2_prop())/3), "%", sep="")), color="navy")+
         scale_y_continuous(limits=c(0,1), labels=percent)+
         scale_x_discrete(labels=c("Aware of\nstatus", "On ART", "Virally\nsuppressed"))+
         theme(axis.text = element_text(size=rel(1.2)),
@@ -268,7 +318,15 @@ plots_server <- function(input, output) {
         xlab("")+
         ylab("")+
         guides(color=FALSE)+
-        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)
+        facet_rep_wrap(~district, ncol=3, repeat.tick.labels = TRUE)  +
+        theme_light() +
+        theme(
+          legend.text = element_text(size = 12),
+          legend.title = element_text(size=12),
+          axis.text = element_text(size=14),
+          strip.text = element_text(size=14, margin = margin(0,0,10,0, unit = "pt"), hjust=0.05, color = "black", face="bold"),
+          strip.background = element_blank()
+        )
     }
   }, height=reactive(plot_height_viz2()), width=reactive(plot_width_viz2()))
 

@@ -35,9 +35,16 @@ clean_data <- function(data_input) {
   
 }
 
-proportion_manip <- function(cleaned_data) {
+proportion_manip <- function(data_clean) {
   
-  proportion_data <- cleaned_data %>%
+  df_73 <- data_clean %>%
+    filter(cas90_81_73 == TRUE) %>%
+    rename(point_73 = point_90, ul_73 = ul_90, ll_73 = ll_90)
+  
+  data_clean <- data_clean %>%
+    filter(cas90_81_73 == FALSE)
+  
+  proportion_data <- data_clean %>%
     group_by(KP, year, district) %>%
     mutate(point_73 = as.numeric(ifelse(casState == "sizeEst", point_90[casState=="sizeEst"],
                                         ifelse(casState == "prev", point_90[casState=="prev"], 
@@ -55,6 +62,9 @@ proportion_manip <- function(cleaned_data) {
                                                    ifelse(casState == "onART", ul_90[casState=="aware"]*ul_90[casState=="onART"], 
                                                           ifelse(casState == "vSupp", ul_90[casState=="aware"]*ul_90[casState=="onART"]*ul_90[casState=="vSupp"], ""))))))) %>%
     ungroup
+  
+  proportion_data <- proportion_data %>%
+    bind_rows(df_73)
   
   return(proportion_data)
   

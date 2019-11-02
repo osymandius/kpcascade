@@ -66,7 +66,7 @@ plots <- function() {
                         column(2, uiOutput("single_year_option"))
                     )
                   ),
-                  column(2, selectInput(inputId = "cascade", label = "Cascade type", choices=c("90-90-90", "90-81-73", "Custom")))
+                  column(2, uiOutput("cascade_option"))
                 ),
                 fluidRow(
                   column(5, 
