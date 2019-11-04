@@ -1,6 +1,6 @@
 upload_data_server <- function(input, output) {
   
-  example_data <- read.csv("example_data.csv", stringsAsFactors = FALSE) %>%
+  example_data <<- read.csv("example_data.csv", stringsAsFactors = FALSE) %>%
     arrange(Province)
   
   data_clean <- clean_data(example_data)
