@@ -24,10 +24,6 @@ plots_server <- function(input, output) {
     output$viz_option <- renderText("multiple")
   })
   
-  # observeEvent(input$toggle_viz_examples, {
-  #   toggle("viz_examples")
-  # })
-  
   observeEvent(input$cascade, {
     if(input$cascade=="Custom") {
       show("custom_90s")
@@ -35,10 +31,6 @@ plots_server <- function(input, output) {
       hide("custom_90s")
     }
   })
-  
-  # nineties <- c(90,90,90)
-  
-  # nineties <- c(95,80,40)
   
   nineties <- reactive(
     if(input$cascade=="90-90-90") {
@@ -66,8 +58,8 @@ plots_server <- function(input, output) {
   num_rows_viz1 <- reactive(ceiling(num_plots_viz1()/3))
   
   plot_height_viz1 <- reactive(400*num_rows_viz1())
-  plot_width_viz1 <- reactive(ifelse(num_plots_viz1()==1, 350, ifelse(
-    num_plots_viz1()==2, 700, 1050)
+  plot_width_viz1 <- reactive(ifelse(num_plots_viz1()==1, 375, ifelse(
+    num_plots_viz1()==2, 750, 1125)
   )
   )
   
@@ -85,12 +77,10 @@ plots_server <- function(input, output) {
   num_rows_viz2 <- reactive(ceiling(num_plots_viz2()/3))
   
   plot_height_viz2 <- reactive(400*num_rows_viz2())
-  plot_width_viz2 <- reactive(ifelse(num_plots_viz2()==1, 350, ifelse(
-    num_plots_viz2()==2, 700, 1050)
+  plot_width_viz2 <- reactive(ifelse(num_plots_viz2()==1, 375, ifelse(
+    num_plots_viz2()==2, 750, 1125)
   )
   )
-  
-  ### Number of repeats for target lines
   
   viz1_prop <- reactive(
     proportion_data %>%
@@ -114,16 +104,6 @@ plots_server <- function(input, output) {
       filter(year %in% input$multiple_year) %>%
       filter(district %in% input$subnat1)
   )
-  
-  observeEvent(input$single_kp, {
-    print(paste0(input$single_kp))
-  })
-  observeEvent(input$multiple_year, {
-    print(paste0(input$multiple_year))
-  })
-  observeEvent(input$subnat1, {
-    print(paste0(input$subnat1))
-  })
   
   #### Viz 1: Single KP, multi year, multi subnat
   # Viz1: Percent
@@ -339,22 +319,55 @@ plots_server <- function(input, output) {
   
   
 ## Results in tabular form
+
   
-  output$cascade_table_proportion <- renderDT(
+  output$viz1_cascade_table_proportion <- renderDT(
     datatable(proportion_data %>%
+                filter(KP == input$single_kp) %>%
+                filter(year %in% input$multiple_year) %>%
+                filter(district %in% input$subnat1) %>%
+                select(-c(cas90_81_73, Method, Source)) %>%
                 filter(casState != "sizeEst") %>%
                 namesToHuman(),
               container = wide6(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
       formatRound(columns = 5:10, digits=3) 
   )
   
-  output$cascade_table_count <- renderDT(
+  output$viz1_cascade_table_count <- renderDT(
     datatable(count_data %>%
-                select(-c(count_target, x, xend)) %>%
+                select(-c(count_target, x, xend, cas90_81_73, Method, Source)) %>%
                 filter(casState != "sizeEst") %>%
+                filter(KP == input$single_kp) %>%
+                filter(year %in% input$multiple_year) %>%
+                filter(district %in% input$subnat1) %>%
                 namesToHuman() %>%
                 mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)),
-              container = wide3_73(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
+              container = wide3_count(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
+      formatRound(columns=5:7, digits=0)
+  )
+  
+  output$viz2_cascade_table_proportion <- renderDT(
+    datatable(proportion_data %>%
+                filter(KP %in% input$multiple_kp) %>%
+                filter(year == input$single_year) %>%
+                filter(district %in% input$subnat1) %>%
+                select(-c(cas90_81_73, Method, Source)) %>%
+                filter(casState != "sizeEst") %>%
+                namesToHuman(),
+              container = wide6(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
+      formatRound(columns = 5:10, digits=3) 
+  )
+  
+  output$viz2_cascade_table_count <- renderDT(
+    datatable(count_data %>%
+                select(-c(count_target, x, xend, cas90_81_73, Method, Source)) %>%
+                filter(casState != "sizeEst") %>%
+                filter(KP %in% input$multiple_kp) %>%
+                filter(year == input$single_year) %>%
+                filter(district %in% input$subnat1) %>%
+                namesToHuman() %>%
+                mutate(Cascade.status = ifelse(Cascade.status=="Prevalence", "KPLHIV", Cascade.status)),
+              container = wide3_count(), rownames=FALSE, options = list(pageLength=999, dom='t')) %>%
       formatRound(columns=5:7, digits=0)
   )
   
@@ -386,6 +399,37 @@ plots_server <- function(input, output) {
                 con, na="", row.names = FALSE)
     }
   )
+  
+  # output$viz1_download_plots <- downloadHandler(
+  #   filename = function() {
+  #     paste("KPCascade_plots.pdf")
+  #   },
+  #   content = function (con) {
+  #     ggsave(con, plot = , device = "pdf")
+  #   }
+  # )
+  
+  # output$viz1_plot_download <- downloadHandler(
+  #   filename = "KPCascade_plots.pdf",
+  #   content = function(file) {
+  #     tempReport <- file.path(tempdir(), "KPCascade_plots.Rmd")
+  #     file.copy("KPCascade_plots", tempReport, overwrite = TRUE)
+  #     
+  #     # Set up parameters to pass to Rmd document
+  #     params <- list(viz1_prop = output$viz1_cascade_percent,
+  #                    viz1_count  = output$cascade_count
+  #                    )
+  #     
+  #     # Knit the document, passing in the `params` list, and eval it in a
+  #     # child of the global environment (this isolates the code in the document
+  #     # from the code in this app).
+  #     rmarkdown::render(tempReport, output_file = file,
+  #                       params = params,
+  #                       envir = new.env(parent = globalenv())
+  #     )
+  #   }
+  # )
+  
 }
 
 

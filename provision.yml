@@ -6,5 +6,5 @@ packages:
  - scales
  - lemon
  - shinyjs
- - plotly
- - stringr
+ - rmarkdown
+ - tinytex

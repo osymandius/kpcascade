@@ -73,3 +73,22 @@ wide3_73 <- function(){
     )
   ))
 }
+
+wide3_count <- function(){
+  htmltools::withTags(table(
+    class = 'display',
+    thead(
+      tr(
+        th(rowspan = 2, 'Cascade State'),
+        th(rowspan = 2, 'KP'),
+        th(rowspan = 2, 'Year'),
+        th(rowspan = 2, 'Province'),
+        th(rowspan = 2, 'District'),
+        th(colspan = 3, 'Size Estimate')
+      ),
+      tr(
+        lapply(rep(c('Point Estimate', 'Lower 95% Bound', "Upper 95% Bound"), 1), th)
+      )
+    )
+  ))
+}

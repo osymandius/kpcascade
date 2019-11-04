@@ -1,5 +1,5 @@
 plots <- function() {
-  div(style="margin-left:5%; margin-right: 5%",
+  div(style="margin-left:2%; margin-right: 2%",
       h2("Visualise data"),
       br(),
       p(style="font-size:16px", "Treatment cascades are available in two configurations - comparing the progress of a single population over time, or comparing multiple populations at a single point in time. If treatment cascades for the general population are uploaded, the latter configuration can assist with the visualisation of the treatment gap."),
@@ -35,17 +35,6 @@ plots <- function() {
                                                      )
           )
         )
-        # actionButton(inputId = "toggle_viz_examples", label="Toggle example viz"),
-        # div(id="viz_examples", style="align-items: center", 
-        #     fluidRow(
-        #       column(5, "Choose this to viz 1 pop in mutliple cities over multiple years"),
-        #       column(5, offset=1, "Choose this to viz multiple pops in multiple cities in 1 year")            
-        #     ),
-        #     fluidRow(
-        #       column(5, img(style="width:100%", src="placeholder.png")),
-        #       column(5, offset=1, img(style="width:100%", src="placeholder.png"))
-        #     )
-        # )
       ),
       hr(),
       hidden(
@@ -88,10 +77,8 @@ plots <- function() {
             tabsetPanel(
               tabPanel(title = HTML("<b style='font-size:18px'>Plots</b>"),
                        conditionalPanel("output.viz_option == 'single'",
-                                        #textOutput("city_option"),
                                         h3("Cascade by percentage"),
-                                        #textOutput("city_option"),
-                                        # uiOutput("plot.ui"),
+                                        #downloadButton("viz1_plot_download"),
                                         plotOutput("viz1_cascade_percent"),
                                         #plotlyOutput("viz1_cascade_percent"),
                                         h3("Cascade by size estimate"),
@@ -102,6 +89,7 @@ plots <- function() {
                                         h3("Cascade by percentage"),
                                         plotOutput("viz2_cascade_percent"),
                                         h3("Cascade by size estimate"),
+                                        br(),
                                         h4("Size estimates only available with single population visualisation"),
                                         br(),
                                         br()
@@ -110,15 +98,27 @@ plots <- function() {
               tabPanel(title = HTML("<b style='font-size:18px'>Data</b>"),
                        br(),
                        tabsetPanel(
-                         tabPanel(title=HTML("<b style='font-size:18px'>Proportions</b>"),
-                                  column(3, offset=4, downloadButton("download_proportion_cascade", label="Download proportion cascade")),
-                                  column(10, DTOutput("cascade_table_proportion"))
+                         tabPanel(title=HTML("<b style='font-size:18px'>Cascade by proportion</b>"),
+                                  conditionalPanel("output.viz_option == 'single'",
+                                    #column(3, offset=4, downloadButton("viz1_download_proportion_cascade", label="Download proportion cascade")),
+                                    column(10, DTOutput("viz1_cascade_table_proportion"))
+                                  ),
+                                  conditionalPanel("output.viz_option == 'multiple'",
+                                    #column(3, offset=4, downloadButton("download_proportion_cascade", label="Download proportion cascade")),
+                                    column(10, DTOutput("viz2_cascade_table_proportion"))
+                                  )
                          ),
-                         tabPanel(title=HTML("<b style='font-size:18px'>Counts</b>"),
-                                  column(3, offset=4, downloadButton("download_count_cascade", label="Download size estimate cascade")),
-                                  column(10, offset=1, DTOutput("data_upload_size2")),
-                                  br(),
-                                  column(10, offset=1, DTOutput("cascade_table_count"))
+                         
+                         tabPanel(title=HTML("<b style='font-size:18px'>Cascade by size estimate</b>"),
+                                  conditionalPanel("output.viz_option == 'single'",
+                                    br(),
+                                    #column(3, offset=4, downloadButton("download_count_cascade", label="Download size estimate cascade")),
+                                    column(10,DTOutput("viz1_cascade_table_count"))
+                                  ),
+                                  conditionalPanel("output.viz_option == 'multiple'",
+                                    br(),
+                                    h5("Size estimates only available with single population visualisation")
+                                  )
                          )
                        )
               )

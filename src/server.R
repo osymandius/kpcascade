@@ -1,18 +1,7 @@
-# source("data_manip.R")
-# source("server/data_tables.R")
-# source("server/upload_data_server.R")
-# source("server/plots_server.R")
-# source("style.css")
-
 server <- function(input, output) {
   
   upload_data_server(input, output)
-
-  ######## Output % plots & associated datatable #############
-  
+  cascade_input_server(input, output)
   plots_server(input, output)
-
-  
-  ########################################
   
 }

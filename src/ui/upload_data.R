@@ -25,11 +25,13 @@ upload_data <- function() {
     ),
     tabsetPanel(
       tabPanel(title = HTML("<b style='font-size:18px'>Size estimates</b>"),
+          br(),
           fluidRow(
             column(10, offset=1, DTOutput(outputId = "data_upload_size"))
           )
       ),
       tabPanel(title = HTML("<b style='font-size:18px'>Cascade data</b>"),
+        br(),
         column(10, offset=1, DTOutput(outputId = "data_upload_prop"))
       )
     )

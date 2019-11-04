@@ -1,0 +1,18 @@
+---
+title: "KPCascade Plot Outputs"
+output: pdf_document
+params:
+  n: NA
+---
+
+HIV Treatment Cascades for Key Populations | [KPCascade](https://shiny.dide.imperial.ac.uk/kpcascade/)
+  
+```{r}
+# The `params` object is available in the document.
+params$viz1_prop
+```
+
+
+```{r}
+params$viz1_count
+```
