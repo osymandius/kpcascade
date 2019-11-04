@@ -2,17 +2,15 @@ cascade_input_server <- function(input, output) {
   
   
   output$single_KP_option <- renderUI({
-    selectizeInput(inputId = "single_kp", label="1) Key population", choices=c("Choose KP" = "", as.character(unique(example_data$KP))), selected=NULL)
+    selectizeInput(inputId = "single_kp", label="1) Key population", choices=c("Choose KP" = "", as.character(unique(proportion_data$KP))), selected=NULL)
   })
   
   output$multiple_year_option <- renderUI({
-    # selected <- example_data$Year[1]
-    # if(is.null(selected)) selected <- unique(example_data$Year)[1]
     selectizeInput(inputId = "multiple_year", label = "3) Survey year(s)", choices=NULL, multiple=TRUE, selected=NULL)
   })
   
   output$multiple_KP_option <- renderUI({
-    selectizeInput(inputId = "multiple_kp", label="1) Key population(s)", multiple=TRUE, choices=as.character(unique(example_data$KP)), selected=NULL)
+    selectizeInput(inputId = "multiple_kp", label="1) Key population(s)", multiple=TRUE, choices=as.character(unique(proportion_data$KP)), selected=NULL)
   })
   
   output$single_year_option <- renderUI({
