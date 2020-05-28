@@ -46,21 +46,21 @@ proportion_manip <- function(data_clean) {
   
   proportion_data <- data_clean %>%
     group_by(KP, year, district) %>%
-    mutate(point_73 = as.numeric(ifelse(casState == "sizeEst", point_90[casState=="sizeEst"],
+    mutate(point_73 = signif(as.numeric(ifelse(casState == "sizeEst", point_90[casState=="sizeEst"],
                                         ifelse(casState == "prev", point_90[casState=="prev"], 
                                                ifelse(casState == "aware", point_90[casState=="aware"], 
                                                       ifelse(casState == "onART", point_90[casState=="aware"]*point_90[casState=="onART"], 
-                                                             ifelse(casState == "vSupp", point_90[casState=="aware"]*point_90[casState=="onART"]*point_90[casState=="vSupp"], ""))))))) %>%
-    mutate(ll_73 = as.numeric(ifelse(casState == "sizeEst", ll_90[casState=="sizeEst"],
+                                                             ifelse(casState == "vSupp", point_90[casState=="aware"]*point_90[casState=="onART"]*point_90[casState=="vSupp"], "")))))), digits=3)) %>%
+    mutate(ll_73 = signif(as.numeric(ifelse(casState == "sizeEst", ll_90[casState=="sizeEst"],
                                      ifelse(casState == "prev", ll_90[casState=="prev"], 
                                             ifelse(casState == "aware", ll_90[casState=="aware"], 
                                                    ifelse(casState == "onART", ll_90[casState=="aware"]*ll_90[casState=="onART"], 
-                                                          ifelse(casState == "vSupp", ll_90[casState=="aware"]*ll_90[casState=="onART"]*ll_90[casState=="vSupp"], ""))))))) %>%
-    mutate(ul_73 = as.numeric(ifelse(casState == "sizeEst", ul_90[casState=="sizeEst"],
+                                                          ifelse(casState == "vSupp", ll_90[casState=="aware"]*ll_90[casState=="onART"]*ll_90[casState=="vSupp"], "")))))), digits=3)) %>%
+    mutate(ul_73 = signif(as.numeric(ifelse(casState == "sizeEst", ul_90[casState=="sizeEst"],
                                      ifelse(casState == "prev", ul_90[casState=="prev"], 
                                             ifelse(casState == "aware", ul_90[casState=="aware"], 
                                                    ifelse(casState == "onART", ul_90[casState=="aware"]*ul_90[casState=="onART"], 
-                                                          ifelse(casState == "vSupp", ul_90[casState=="aware"]*ul_90[casState=="onART"]*ul_90[casState=="vSupp"], ""))))))) %>%
+                                                          ifelse(casState == "vSupp", ul_90[casState=="aware"]*ul_90[casState=="onART"]*ul_90[casState=="vSupp"], "")))))), digits=3)) %>%
     ungroup
   
   proportion_data <- proportion_data %>%
